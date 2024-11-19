@@ -25,7 +25,7 @@ const Login = () => {
                 {/* login email */}
                 <fieldset className='w-fit relative'>
                     <input onInput={handleEmailInput} className='w-[372px] h-[70px] border-b border-[rgb(3,1,76,0.20)] outline-none  peer placeholder-transparent' type="email" name='email' id='loginEmail' placeholder='Email Address' />
-                    <label className={`${onInputEmail ? " top-[-10px]  peer-focus:top-[-10px] text-[13.99px]  text-[rgb(3,1,76,0.50)]" : "top-1/2 -translate-y-1/2 text-xl "}
+                    <label className={`${onInputEmail ? " top-[-10px]  peer-focus:top-[-10px] text-[13px]  text-[rgb(3,1,76,0.50)]" : "top-1/2 -translate-y-1/2 "}
                       block font-sans font-semibold text-xl text-[#03014C] absolute peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-focus:top-0 peer-focus:text-[14px] peer-focus:text-[rgb(3,1,76,0.50)] transition-all duration-500  `} htmlFor="loginEmail">
                     Email Address
                     </label>
@@ -35,7 +35,7 @@ const Login = () => {
 
                 <fieldset className='w-fit relative '>
                     <input onInput={handlePwdInput} className='w-[372px] h-[70px] border-b border-[rgb(3,1,76,0.20)] outline-none  peer placeholder-transparent' type="password" name='pwd' id='loginPwd' placeholder='Password' />
-                    <label className={`${onInputPwd ? " top-[-10px]  peer-focus:top-[-10px] text-[13.99px]  text-[rgb(3,1,76,0.50)]" : "top-1/2 -translate-y-1/2 text-[20px] "}
+                    <label className={`${onInputPwd ? " top-[-10px]  peer-focus:top-[-10px] text-[13px]  text-[rgb(3,1,76,0.50)]" : "top-1/2 -translate-y-1/2  "}
                       block font-sans font-semibold text-xl text-[#03014C] absolute peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-focus:top-0 peer-focus:text-sm peer-focus:text-[rgb(3,1,76,0.50) transition-all duration-500  ]`} htmlFor="loginpwd">
                     Password
                     </label>
