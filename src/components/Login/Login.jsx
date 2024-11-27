@@ -40,7 +40,7 @@ const Login = () => {
         if(!email){
             setEmailErro("Plase Fill up Email");
         }
-        if(!password){
+       else if(!password){
             setPasswordErro("Plase Fill up Password");
         }
     }
@@ -55,7 +55,7 @@ const Login = () => {
     // login validation end
     
   return (
-    <section className='flex pt-10 items-center '>
+    <section className='flex  items-center '>
         <article className='w-1/2  ml-[180px]'>
             <header className='space-y-[29px]'>
                 <h1 className='font-sans font-bold text-[34px] text-[#03014C]'>Login to your account!</h1>

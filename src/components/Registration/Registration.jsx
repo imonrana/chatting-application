@@ -39,49 +39,40 @@ const Registration = () => {
      const [password, setPassword] = useState("");
      const [passwordErro, setPasswordErro] = useState("");
 
-     const [currentSteep, setCurrentSteep] = useState("email");
+
 
     const handelEmail = (e)=>{
       setEmail(e.target.value);
-      setEmailErro(" ");
+      setEmailErro("");
     }
 
     const handelFullName = (e)=>{
       setFullName(e.target.value);
-      setFullNameErro(" ");
+      setFullNameErro("");
     }
 
     const handelPassword = (e)=>{
       setPassword(e.target.value);
-      setPasswordErro(" ");
+      setPasswordErro("");
     }
 
     const handelSubmit= (e) =>{
       e.preventDefault();
 
-     if(currentSteep === "email"){
       if(!email){
         setEmailErro("Plase input a Email Address");
+        
       }
+    
       else if(!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)){
           setEmailErro("Plase input  valid Email Address ")
           
       }
-      else{
-        setCurrentSteep("fullName");
-      }
-     }
-
-     if(currentSteep === "fullName"){
-      if(!fullName){
+      else if(!fullName){
         setFullNameErro("Plase Enter Your Name");
+        
       }
-      else{
-        setCurrentSteep("password");
-      }
-     }
-      if(currentSteep === "password"){
-        if(!password){
+       else if(!password){
           setPasswordErro("Plase Enter password");
         }
         else if(!/[A-Z]/.test(password)){
@@ -106,14 +97,19 @@ const Registration = () => {
         //         password.length < 8 ){
         //   setPasswordErro("Password must include at least one [A-Z],  [a-z], [0-9], [~!@#$%^&*], and  at least 8 characters.");
         // }
-        else{
-          alert("success")
+        if(email && password && fullName &&  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email) &&
+        /[A-Z]/.test(password) &&
+                /[a-z]/.test(password) &&
+                /[\d]/.test(password) &&
+                /[\W]/.test(password) &&
+                password.length > 8
+      ){
+          alert("Registration Succesfull")
         }
-        
       }
 
-     
-    }
+      
+    
 
   /* ================================= 
            from validation end
@@ -159,10 +155,10 @@ const Registration = () => {
               Email Address
             </label>
             
-             {currentSteep === "email" && (
+             
               <p className="absolute -bottom-5 left-0  text-red-500">{emailErro}</p>
-            )
-            }
+            
+          
           </fieldset>
 
           {/* Full Name field */}
@@ -187,11 +183,11 @@ const Registration = () => {
             >
               Full Name
             </label>
-           {currentSteep === "fullName" && (
+       
              <p className="absolute -bottom-5 left-0 text-red-500">
              {fullNameErro}
            </p>
-           )}
+          
           </fieldset>
 
           {/* Password field */}
@@ -215,9 +211,9 @@ const Registration = () => {
             >
               Password
             </label>
-            {currentSteep === "password" && (
+
               <p className="absolute -bottom-12 left-0 text-red-500">{passwordErro}</p>
-            ) }
+            
             {/* toogle show pass button */}
           <button onClick={(e)=>{
             e.preventDefault()
