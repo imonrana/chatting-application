@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-import registration from "../../assets/registration.png";
-import Button from "../Button/Button";
+import registration from "../../../assets/registration.png";
+import Button from "../../Button/Button";
 
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";

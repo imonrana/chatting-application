@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import login from "../../assets/login.jpg"
+import login from "../../../assets/login.jpg"
 import { FcGoogle } from "react-icons/fc";
-import Button from '../Button/Button';
+import Button from '../../Button/Button';
 
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+
 const Login = () => {
+    
     /* ===============================
          style daynamic label start
     ==================================*/

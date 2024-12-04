@@ -16,6 +16,12 @@ export default {
         "secondary": "#000000",
         "info": "#11175D"
       },
+      maxWidth:{
+        "container": "1440px"
+      },
+      boxShadow:{
+        "box":  "0 4px 4px rgba(0, 0, 0, 0.25)"
+      }
       
     },
   },
