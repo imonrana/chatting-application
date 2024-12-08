@@ -5,7 +5,18 @@ import Button from '../../Button/Button';
 
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+// firebase login
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
+
+// React Tostify 
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+
+// React Loder spiner
+import { ThreeCircles } from 'react-loader-spinner'
 
 const Login = () => {
     
@@ -19,7 +30,7 @@ const Login = () => {
    /* ===============================
          style daynamic label end
     ==================================*/
-
+    const [worngLoingInfo, setWorngLoginInfo] = useState("") 
 
     // login valildation & password hide show start
 
@@ -28,23 +39,72 @@ const Login = () => {
     const handelEmail = (e)=>{
         setEmail(e.target.value);
         setEmailErro("")
+        setWorngLoginInfo("")
     }
     const handelPassword = (e)=>{
         setPassword(e.target.value);
         setPasswordErro("")
+        setWorngLoginInfo("")
     }
 
     // show error
     const [emailErro, setEmailErro] = useState("");
     const [passwordErro, setPasswordErro] = useState("");
+    // show error end
+
+    // login success sart massage
+    const [success, setSuccess] = useState(false)
+
+    // login success end massage 
+    // navgiate to home 
+    const navigate = useNavigate()
+
 
     function handelLogin(e){
         e.preventDefault();
         if(!email){
             setEmailErro("Plase Fill up Email");
+            return
         }
-       else if(!password){
+        else if(!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)){
+            setEmailErro("Plase input  valid Email Address ");
+            return
+        }
+         if(!password){
             setPasswordErro("Plase Fill up Password");
+            return
+        }
+        else if(!/[A-Z]/.test(password) || 
+        !/[a-z]/.test(password) || 
+        !/[\d]/.test(password) || 
+        !/[\W]/.test(password) ||
+        password.length < 8 ){
+        setPasswordErro("Password must include at least one [A-Z],  [a-z], [0-9], [~!@#$%^&*], and  at least 8 characters.");
+        return
+        }
+        if(email && password 
+      ){
+            const auth = getAuth();
+            signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in 
+                const user = userCredential.user;
+              toast.success("Login Success");
+              setSuccess(true);
+              setTimeout(() => {
+                navigate("/home")
+              }, 3000);
+                
+                
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                
+                if(errorCode.includes("auth/invalid-credential")){
+                    setWorngLoginInfo("Your Email & Password Wrong");
+                }
+            });
         }
     }
 
@@ -59,6 +119,42 @@ const Login = () => {
     
   return (
     <section className='flex  items-center '>
+          {/* tostify registration succees start */}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition: Bounce
+        />
+      {/* tostify Registration succes end */}
+
+      {/* React Loder spinaer start */}
+      {
+        success &&
+        <ThreeCircles
+        visible={true}
+        height="100"
+        width="100"
+        color="#4fa94d"
+        ariaLabel="three-circles-loading"
+        wrapperStyle={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)"
+        }}
+        wrapperClass=""
+        />
+      }
+      {/* React Loder spiner end */}
+      
         <article className='w-1/2  ml-[180px]'>
             <header className='space-y-[29px]'>
                 <h1 className='font-sans font-bold text-[34px] text-[#03014C]'>Login to your account!</h1>
@@ -68,7 +164,7 @@ const Login = () => {
                      </p>
             </header>
 
-            <form action="" className='pt-[32px] space-y-[60px]'>
+            <form action="" className='pt-[32px] space-y-[60px] relative'>
                 {/* login email */}
                 <fieldset className='w-fit relative'>
                     <input 
@@ -97,11 +193,14 @@ const Login = () => {
                       block font-sans font-semibold text-xl text-[#03014C] absolute peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-focus:top-0 peer-focus:text-sm peer-focus:text-[rgb(3,1,76,0.50) transition-all duration-500  ]`} htmlFor="loginpwd">
                     Password
                     </label>
-                    <p className='absolute -bottom-7 left-0 text-red-500'>{passwordErro}</p>
+                    <p className='absolute -bottom-12 left-0 text-red-500'>{passwordErro}</p>
                     {/* show pass */}
 
                     <button onClick={showPassword} type='button'>{showPass? <FaEye />:<FaEyeSlash />}</button>
                 </fieldset>
+                {worngLoingInfo && 
+                <p className='text-red-500 absolute -bottom-7 left-0'>{worngLoingInfo}</p>
+                }
             </form>
             <div className='mt-[55px] space-y-[43px]'>
                 <Button onClick={handelLogin} className="py-[26px] px-[122px] rounded-lg font-sans font-semibold text-xl text-[#FFFFFF]">Login to Continue</Button>

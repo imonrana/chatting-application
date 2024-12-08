@@ -55,7 +55,7 @@ const Registration = () => {
     //  show error part end
 
     // registration succes start
-    const [succes, setSucces] = useState(null);
+    const [succes, setSucces] = useState(false);
     const navigate = useNavigate()
     // registration succes end
 
@@ -129,7 +129,12 @@ const Registration = () => {
         createUserWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
             // Signed up 
-            toast.success("Registration succesfully done")
+            toast.success("Registration succesfully done");
+            setSucces(true);
+            // input field empty
+            setEmail("");
+            setFullName("");
+            setPassword("");
             setTimeout(() => {
               navigate("/login")
             }, 3000);
@@ -174,7 +179,25 @@ const Registration = () => {
         />
       {/* tostify Registration succes end */}
 
-   
+      {/* React Loder spinaer start */}
+      {
+        succes &&
+        <ThreeCircles
+        visible={true}
+        height="100"
+        width="100"
+        color="#4fa94d"
+        ariaLabel="three-circles-loading"
+        wrapperStyle={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)"
+        }}
+        wrapperClass=""
+        />
+      }
+      {/* React Loder spiner end */}
       
       {/* Registration part */}
       <article className="font-nunito w-1/2 ml-[190px] ">
@@ -190,24 +213,7 @@ const Registration = () => {
    {/* registration header part end */}
     
    {/* registration form part start */}
-        <form  className="mt-[39px] relative">
-             {/* React Loder spinaer start */}
-      <ThreeCircles
-        visible={true}
-        height="100"
-        width="100"
-        color="#4fa94d"
-        ariaLabel="three-circles-loading"
-        wrapperStyle={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-        
-          transform: "translate(-50%, -50%)"
-        }}
-        wrapperClass=""
-        />
-      {/* React Loder spiner end */}
+        <form  className="mt-[39px]">
           {/* Email field */}
           <fieldset className="relative w-fit">
             <input
@@ -274,6 +280,7 @@ const Registration = () => {
               className="block peer pl-5 border-[rgb(17,23,93,0.30)] border rounded-lg w-[368px] h-[70px] outline-none placeholder-transparent"
               type={showpass? "password": "text"}
               name="pwd"
+              value={password}
               id="pwd"
               placeholder="Password"
             />
