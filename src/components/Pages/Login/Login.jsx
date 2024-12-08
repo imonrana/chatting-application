@@ -5,6 +5,7 @@ import Button from '../../Button/Button';
 
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     
@@ -104,7 +105,7 @@ const Login = () => {
             </form>
             <div className='mt-[55px] space-y-[43px]'>
                 <Button onClick={handelLogin} className="py-[26px] px-[122px] rounded-lg font-sans font-semibold text-xl text-[#FFFFFF]">Login to Continue</Button>
-                <p className='font-sans text-sm font-normal text-[#03014C]'>Don’t have an account ? <span className=' font-bold text-[#EA6C00] cursor-pointer'>Sign up</span></p>
+                <p className='font-sans text-sm font-normal text-[#03014C]'>Don’t have an account ? <span className=' font-bold text-[#EA6C00] cursor-pointer'><Link to ="/">Sign up</Link></span></p>
             </div>
         </article>
         <figure className='w-1/2'>

@@ -10,6 +10,7 @@ import './App.css'
 import Registration from "./components/Pages/Registration/Registration";
 import Login from "./components/Pages/Login/Login";
 import Home from './components/Pages/Home/Home';
+import firebaseConfig from "./components/Firebase/Firebase.config";
 
 
 const router = createBrowserRouter(
