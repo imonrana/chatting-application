@@ -7,7 +7,7 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 // firebase login
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider ,signInWithPopup } from "firebase/auth";
 
 
 // React Tostify 
@@ -17,9 +17,17 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // React Loder spiner
 import { ThreeCircles } from 'react-loader-spinner'
+import { useDispatch } from 'react-redux';
+import { userLoginInfo } from '../../Slices/userSlice';
+
+// React redux state
+
+
 
 const Login = () => {
-    
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
+    const dispatch = useDispatch()
     /* ===============================
          style daynamic label start
     ==================================*/
@@ -58,7 +66,37 @@ const Login = () => {
     // login success end massage 
     // navgiate to home 
     const navigate = useNavigate()
+// google login
+const googleLogin = ()=>{
+  signInWithPopup(auth, provider)
+  .then((result) => {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    
+    const token = credential.accessToken;
+    // The signed-in user info.
+    const user = result.user;
+    // IdP data available using getAdditionalUserInfo(result)
+    // ...
+    setWorngLoginInfo("")
+    dispatch(userLoginInfo(user))
+    localStorage.setItem("userLoginInfo", JSON.stringify(user));
+    toast.success("Login Success");
+    setSuccess(true);
+    setTimeout(() => {
+      navigate("/home")
+    }, 3000);
 
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    if(errorCode.includes("auth/popup-closed-by-user")){
+      setWorngLoginInfo("Please give your valid gmail")
+    }
+    
+  });
+
+}
 
     function handelLogin(e){
         e.preventDefault();
@@ -84,11 +122,14 @@ const Login = () => {
         }
         if(email && password 
       ){
-            const auth = getAuth();
             signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // Signed in 
                 const user = userCredential.user;
+                
+               dispatch(userLoginInfo(user));
+
+               localStorage.setItem("userLoginInfo", JSON.stringify(user));
               toast.success("Login Success");
               setSuccess(true);
               setTimeout(() => {
@@ -131,7 +172,7 @@ const Login = () => {
         draggable
         pauseOnHover
         theme="colored"
-        transition: Bounce
+        
         />
       {/* tostify Registration succes end */}
 
@@ -158,7 +199,8 @@ const Login = () => {
         <article className='w-1/2  ml-[180px]'>
             <header className='space-y-[29px]'>
                 <h1 className='font-sans font-bold text-[34px] text-[#03014C]'>Login to your account!</h1>
-                <p className='hover:bg-primary transition-all duration-500 hover:text-white py-[23px] pl-[29px] pr-[42px] rounded-lg border border-[rgb(3,1,76,0.30)] w-fit font-sans font-semibold text-sm text-[#03014C] align-middle cursor-pointer'> 
+                <p onClick={googleLogin}
+                 className='hover:bg-primary transition-all duration-500 hover:text-white py-[23px] pl-[29px] pr-[42px] rounded-lg border border-[rgb(3,1,76,0.30)] w-fit font-sans font-semibold text-sm text-[#03014C] align-middle cursor-pointer'> 
                     <span ><FcGoogle className='inline-block text-lg mr-2' /></span>
                      Login with Google
                      </p>
@@ -204,6 +246,7 @@ const Login = () => {
             </form>
             <div className='mt-[55px] space-y-[43px]'>
                 <Button onClick={handelLogin} className="py-[26px] px-[122px] rounded-lg font-sans font-semibold text-xl text-[#FFFFFF]">Login to Continue</Button>
+                <Link to="/forgotPassword"><Button className=" mt-4 py-[10px] px-[122px] rounded-lg font-sans font-semibold text-xl text-[#FFFFFF]">Forgot Password</Button></Link>
                 <p className='font-sans text-sm font-normal text-[#03014C]'>Don’t have an account ? <span className=' font-bold text-[#EA6C00] cursor-pointer'><Link to ="/">Sign up</Link></span></p>
             </div>
         </article>

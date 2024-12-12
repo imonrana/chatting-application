@@ -7,7 +7,7 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 
 // firebase auth email password 
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification  } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 
 // React Tostify 
@@ -76,6 +76,8 @@ const Registration = () => {
       setPasswordErro("");
     }
 
+    // submit Email & password 
+
     const handelSubmit= (e) =>{
       e.preventDefault();
 
@@ -126,6 +128,7 @@ const Registration = () => {
       ){
         // firebase Authentication with email and password
         const auth = getAuth();
+        
         createUserWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
             // Signed up 
@@ -135,6 +138,12 @@ const Registration = () => {
             setEmail("");
             setFullName("");
             setPassword("");
+            // firebase email varification 
+            sendEmailVerification(auth.currentUser)
+            .then(() => {
+              // Email verification sent!
+              toast.success("Email Verification Send, Plese cheek your Email")
+            });
             setTimeout(() => {
               navigate("/login")
             }, 3000);
