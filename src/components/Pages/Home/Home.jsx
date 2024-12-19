@@ -11,7 +11,6 @@ import {  Link, useNavigate } from 'react-router-dom'
 
 // firebase
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import Button from '../../Button/Button'
 import VerifiedEmail from '../../VerifiedEmail/VerifiedEmail'
 
 const Home = () => {
@@ -42,7 +41,7 @@ onAuthStateChanged(auth, (user) => {
   return (
 
  
-  <section className='m-4'>
+  <section  className='relative p-4'>
 {
   verified ?
   <div className='flex gap-x-[20px]'>

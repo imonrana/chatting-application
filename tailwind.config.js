@@ -21,7 +21,22 @@ export default {
       },
       boxShadow:{
         "box":  "0 4px 4px rgba(0, 0, 0, 0.25)"
+      },
+      animation:{
+        "zoomIn": "zoomIn 0.4s  linear ",
+        "zoomOut": "zoomOut 0.4s  linear "
+      },
+      keyframes:{
+        "zoomIn":{
+          '0%': { transform: 'scale(0) ', opacity: '0'},
+          '100%': { transform: 'scale(1) ', opacity: '1'}
+        },
+        "zoomOut":{
+          '0%': { transform: 'scale(1) ', opacity: '1'},
+          '100%': { transform: 'scale(0) ', opacity: '0'}
+        }
       }
+
       
     },
   },

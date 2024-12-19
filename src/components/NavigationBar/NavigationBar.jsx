@@ -1,19 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import profilePhoto from "../../assets/profile_pic.png"
 import { SlHome } from "react-icons/sl";
 import { BsChatDotsFill } from "react-icons/bs";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoSettingsOutline } from "react-icons/io5";
 import { ImExit } from "react-icons/im";
+import { FaCloudUploadAlt } from "react-icons/fa";
+import ProfileImgModal from '../Modals/ProfileImgModal/ProfileImgModal';
 
 
 const NavigationBar = () => {
+  const [profileImgUpdate, setProfileImgUpdate] = useState(false);
+ const [childCropData, setChildCropData] = useState(profilePhoto)
+
   return (
     <section>
         <aside className='w-[186px]  bg-primary rounded-[20px] pt-[38px] pb-[48px]'>
             <div>
-            <figure className='w-[100px] h-[100px]  rounded-full overflow-hidden m-auto'>
-                <img src={profilePhoto} alt="Profile pic" />
+            <figure 
+             onClick={()=>setProfileImgUpdate(true)}
+            className='w-[100px] h-[100px]  rounded-full overflow-hidden m-auto relative group
+            after:content-[""] after:absolute after:top-0 after:left-0 hover:after:bg-[rgba(0,0,0,0.41)] after:h-full after:w-full cursor-pointer transition-all duration-500 '>
+                <img src={childCropData} alt="Profile pic" />
+                <span className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white  text-xl hidden group-hover:inline  '>
+                <FaCloudUploadAlt />
+                </span>
             </figure>
             {/* navigate icon */}
             <div className='mt-[80px]'>
@@ -36,8 +47,13 @@ const NavigationBar = () => {
 
             </div>
             </div>
-            
         </aside>
+        
+        {
+          profileImgUpdate &&
+        
+          <ProfileImgModal setChildCropData = {setChildCropData} setProfileImgUpdate = {setProfileImgUpdate} profileImgUpdate = {profileImgUpdate}/>
+        }
     </section>
   )
 }
