@@ -7,9 +7,13 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { ImExit } from "react-icons/im";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import ProfileImgModal from '../Modals/ProfileImgModal/ProfileImgModal';
+import { getAuth } from 'firebase/auth';
 
 
 const NavigationBar = () => {
+
+  const auth = getAuth()
+
   const [profileImgUpdate, setProfileImgUpdate] = useState(false);
  const [childCropData, setChildCropData] = useState(profilePhoto)
 
@@ -26,8 +30,13 @@ const NavigationBar = () => {
                 <FaCloudUploadAlt />
                 </span>
             </figure>
+            {/* profile Name */}
+            <div>
+              <h3 className='text-center font-nunito text-white text-xl font-bold mt-5'>{auth.currentUser.displayName}</h3>
+            </div>
+
             {/* navigate icon */}
-            <div className='mt-[80px]'>
+            <div className='mt-[60px]'>
             <div className='bg-white text-[43px] text-primary py-[22px] px-[50px] ml-[25px] mr-[8px] rounded-l-[20px]' >
             <SlHome />
             </div>

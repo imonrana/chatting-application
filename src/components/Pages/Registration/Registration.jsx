@@ -7,7 +7,10 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 
 // firebase auth email password 
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification  } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile  } from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
+
+// React Router Dom
 import { Link, useNavigate } from "react-router-dom";
 
 // React Tostify 
@@ -21,6 +24,10 @@ import { ThreeCircles } from 'react-loader-spinner'
 
 
 const Registration = () => {
+
+ // firebase Authentication with email and password
+ const auth = getAuth();
+ const db = getDatabase();
 
 /* ==================================
     dainamic label style start 
@@ -126,11 +133,16 @@ const Registration = () => {
                 /[\W]/.test(password) &&
                 password.length > 8
       ){
-        // firebase Authentication with email and password
-        const auth = getAuth();
-        
+
+       
+// firebase authentication start
+
         createUserWithEmailAndPassword(auth, email, password)
-          .then((userCredential) => {
+        .then((user)=>{
+          updateProfile(auth.currentUser, {
+            displayName: fullName,
+          })
+          .then(() => {
             // Signed up 
             toast.success("Registration succesfully done");
             setSucces(true);
@@ -148,7 +160,15 @@ const Registration = () => {
               navigate("/login")
             }, 3000);
             // ...
+          }).then(()=>{
+            // send user information in database
+            set(ref(db, 'users/' + user.user.uid), {
+              username: user.user.displayName,
+              email: user.user.email,
+            });
           })
+        })
+          
           .catch((error) => {
             const errorCode = error.code;
            if(errorCode.includes("auth/email-already-in-use")){
@@ -157,6 +177,8 @@ const Registration = () => {
             // ..
           });
         }
+
+        // firebase authentication end
       }
 
       

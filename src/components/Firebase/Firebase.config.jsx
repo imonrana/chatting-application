@@ -7,6 +7,7 @@ import { initializeApp } from "firebase/app";
 const firebaseConfig = {
   apiKey: "AIzaSyCi9fCIvhbq1qj9b1x3-_QXIGy2xquZJ3M",
   authDomain: "chattingapplication-83a98.firebaseapp.com",
+  databaseURL: "https://chattingapplication-83a98-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "chattingapplication-83a98",
   storageBucket: "chattingapplication-83a98.firebasestorage.app",
   messagingSenderId: "974873935277",

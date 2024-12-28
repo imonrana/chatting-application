@@ -133,7 +133,7 @@ const googleLogin = ()=>{
               toast.success("Login Success");
               setSuccess(true);
               setTimeout(() => {
-                navigate("/home")
+                navigate("/")
               }, 3000);
                 
                 
@@ -247,7 +247,7 @@ const googleLogin = ()=>{
             <div className='mt-[55px] space-y-[43px]'>
                 <Button onClick={handelLogin} className="py-[26px] px-[122px] rounded-lg font-sans font-semibold text-xl text-[#FFFFFF]">Login to Continue</Button>
                 <Link to="/forgotPassword"><Button className=" mt-4 py-[10px] px-[122px] rounded-lg font-sans font-semibold text-xl text-[#FFFFFF]">Forgot Password</Button></Link>
-                <p className='font-sans text-sm font-normal text-[#03014C]'>Don’t have an account ? <span className=' font-bold text-[#EA6C00] cursor-pointer'><Link to ="/">Sign up</Link></span></p>
+                <p className='font-sans text-sm font-normal text-[#03014C]'>Don’t have an account ? <span className=' font-bold text-[#EA6C00] cursor-pointer'><Link to ="/registration">Sign up</Link></span></p>
             </div>
         </article>
         <figure className='w-1/2'>

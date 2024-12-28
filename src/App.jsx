@@ -18,11 +18,11 @@ import VerifiedEmail from "./components/VerifiedEmail/VerifiedEmail";
 const router = createBrowserRouter(
   createRoutesFromElements(
    <Route>
-    <Route path="/" element = {<Registration/>}/>
+    <Route path="/" element = {<Home/>}/>
+    <Route path="/registration" element = {<Registration/>}/>
     <Route path="/login" element = {<Login/>}/>
     <Route path="/verifiedEmail" element = {<VerifiedEmail/>}/>,
     <Route path="/forgotPassword" element ={<ForgotPassword/>}/>,
-    <Route path = "/home" element = {<Home/>}/>
    </Route>
     
   )
