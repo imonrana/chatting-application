@@ -87,17 +87,21 @@ useEffect(()=>{
 useEffect(()=>{
  
   const blockRef = ref(db, "block/");
-  const arr = []
+
   onValue(blockRef, (snapshot)=>{
+    const arr = []
     snapshot.forEach((item)=>{
       const concateId = item.val().blockId + item.val().blockById;
       arr.push(concateId)
     })
+    setBlockList(arr)
   })
-  setBlockList(arr)
+ 
 },[])
 
-
+// console.log("friendsList", friendsList )
+// console.log("blockList", blockList )
+// console.log(data.userInfo.uid)
 
   return (
     <section>

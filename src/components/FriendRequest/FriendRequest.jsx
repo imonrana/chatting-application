@@ -59,7 +59,6 @@ const handelFriendRequ = (item)=>{
             <div className='ml-[10px]'> 
             <h4 className='font-poppins font-semibold text-sm text-black '>
             {item.senderName}
-           
             </h4>
             <p className='font-poppins font-medium text-xs text-[rgba(77,77,77,0.75)]'>{item.SenderEmail}</p>
             </div>
