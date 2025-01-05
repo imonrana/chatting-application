@@ -6,9 +6,9 @@ import profileOne from "../../assets/profile-one.png"
 import SmallButton from '../SmallButton/SmallButton';
 import { getDatabase, onValue, push, ref, remove, set } from 'firebase/database';
 import { useSelector } from 'react-redux';
+import NoDataWarning from '../NoDataWarning/NoDataWarning';
 
 const BlockedUser = () => {
-    const [datas , setDatas] = useState(true)
 const db = getDatabase();
 const [blockList, setBlockList] = useState([]);
 const data = useSelector((selector)=> selector.userDetails.userInfo);
@@ -27,8 +27,8 @@ useEffect(()=>{
         })
         setBlockList(arr);
     })
-},[datas])
-console.log("block user", blockList)
+},[])
+
 // unblock blocked friend and remove data form block
 
 function handelUnblock(item) {
@@ -41,22 +41,21 @@ function handelUnblock(item) {
     reciverEmail:item.blockEmail,
    }).then(()=>{
     remove(ref(db,"block/" + item.blockListId))
-    setDatas(!datas)
    })
-    console.log(item)
 }
   return (
     <section>
-    <div className='w-[330px] ml-[16px] mt-[43px] pt-5  shadow-box rounded-b-3xl'>
+    <div className='w-[330px] ml-[16px] mt-[43px] pt-5 pb-5  shadow-box rounded-b-3xl'>
   <header className='flex justify-between  mb-[17px] px-5'>
-        <h2 className='font-poppins font-semibold text-xl text-black'>User List</h2>
+        <h2 className='font-poppins font-semibold text-xl text-black'>Block List</h2>
         <BsThreeDotsVertical className='text-[20px] text-primary  '/>
     </header>
 
-    <article>
+    <article className='h-[370px] overflow-y-scroll'>
     {
+        blockList.length>0 ?
         blockList.map((item)=>(
-    <div key={item.blockListId} className='flex justify-between px-5 pb-[13px] mb-4 relative before:content-[""] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:bg-[rgba(0,0,0,0.25)] before:h-[1px] before:w-[277px]'>
+    <div key={item.blockListId} className='flex items-center justify-between px-5 pb-[13px] mb-4 relative before:content-[""] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:bg-[rgba(0,0,0,0.25)] before:h-[1px] before:w-[277px]'>
            
            <div className='flex '>
            <figure className='w-[50px] h-[50px] overflow-hidden '>
@@ -68,14 +67,16 @@ function handelUnblock(item) {
              item.block 
             } 
             </h4>
-             <p className='font-poppins font-medium text-xs text-[rgba(77,77,77,0.75)]'>{item.blockEmail}</p>
+             <p className='font-poppins font-medium text-xs text-[rgba(77,77,77,0.75)]'>{item.blockEmail.slice(0,17) + (item.blockEmail.length>17 ? "..." : "")}</p>
             </div>
            </div>
            <div>
-                <SmallButton onClick={()=>handelUnblock(item)} className ="px-[22px] py-1">Unblock</SmallButton>
+                <SmallButton onClick={()=>handelUnblock(item)} className ="px-3 py-1 !text-base">Unblock</SmallButton>
             </div>
         </div>
     ))
+    :
+    <NoDataWarning title={"You have 0 Blocked user"}/>
 }
         </article>
         </div>

@@ -6,6 +6,7 @@ import profileOne from "../../assets/profile-one.png";
 
 import { getDatabase, onValue, push, ref, remove, set } from 'firebase/database';
 import { useSelector } from 'react-redux';
+import NoDataWarning from '../NoDataWarning/NoDataWarning';
 
 
 
@@ -27,6 +28,13 @@ useEffect(()=>{
         setFriends(arr);
     })
 },[])
+
+// remove data form friends handel unfriend
+
+const handelUnfriend =  (item)=>{
+    remove(ref(db, "friends/" + item.friendsId))
+}
+
 
 // wirte data for block friends 
 
@@ -59,14 +67,15 @@ function handelBlock(item){
 
   return (
     <section>
-        <div className='w-[330px] ml-[16px] pt-5 pb-[70px] shadow-box rounded-b-3xl'>
+        <div className='w-[330px] ml-[16px] pt-5 pb-5 shadow-box rounded-b-3xl'>
       <header className='flex justify-between  mb-[17px] px-5'>
             <h2 className='font-poppins font-semibold text-xl text-black'>Friends</h2>
             <BsThreeDotsVertical className='text-[20px] text-primary  '/>
         </header>
 
-        <article>
+        <article className='h-[370px] overflow-y-scroll'>
         {
+            friends.length>0 ?
             friends.map((item, index)=>(
                 <div key={index} className='flex justify-between px-5 pb-[13px] mb-4 relative before:content-[""] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:bg-[rgba(0,0,0,0.25)] before:h-[1px] before:w-[277px]'>
                 <div className="flex">
@@ -78,15 +87,18 @@ function handelBlock(item){
                 {data.uid == item.reciverId ? item.senderName : item.reciverName}
                 </h4>
                 <p className='font-poppins font-medium text-xs text-[rgba(77,77,77,0.75)]'>
-                    {data.uid == item.reciverId ? item.senderEmail : item.reciverEmail}
+                    {data.uid == item.reciverId ? item.senderEmail.slice(0, 12) + (item.senderEmail.length>12 ? "..." : "") : item.reciverEmail.slice(0, 12) + (item.reciverEmail.length >12 ? "..." : "")}
                 </p>
                 </div>
                 </div>
-                <div className='mt-2'>
-                    <SmallButton onClick={()=>handelBlock(item)} className= "py-1 px-2 text-base rounded-md">Block</SmallButton>
+                <div className='mt-2 flex gap-2'>
+                    <SmallButton onClick={()=>handelUnfriend(item)} className= "py-0.5 px-2 text-xs ml-1 rounded-md">Unfriend</SmallButton>
+                    <SmallButton onClick={()=>handelBlock(item)} className= "py-0.5 px-2 text-xs rounded-md">Block</SmallButton>
                 </div>
             </div>
             ))
+            :
+            <NoDataWarning title="You have 0 friends"/>
         }
 
 

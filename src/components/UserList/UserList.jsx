@@ -5,7 +5,7 @@ import profileOne from "../../assets/profile-one.png"
 import SmallButton from '../SmallButton/SmallButton';
 
 // fire base import
-import { getDatabase, ref, onValue, push, set } from "firebase/database";
+import { getDatabase, ref, onValue, push, set, remove } from "firebase/database";
 import { useSelector } from 'react-redux';
 
 
@@ -58,10 +58,10 @@ useEffect(()=>{
   onValue(friendRequestRef, (snapshot) => {
    const dataArr = [];
     snapshot.forEach(item => {
-     dataArr.push(item.val().senderId + item.val().reciverId);
+     dataArr.push({combinedId: item.val().senderId + item.val().reciverId, frndReqId:item.key});
      
     });
-    setFriendRequestList(dataArr)
+    setFriendRequestList(dataArr);
   });
 },[])
 
@@ -77,7 +77,7 @@ useEffect(()=>{
      dataArr.push(item.val().senderId + item.val().reciverId);
      
     });
-    setFriendsList(dataArr)
+    setFriendsList(dataArr);
   });
 },[])
 
@@ -92,29 +92,39 @@ useEffect(()=>{
     const arr = []
     snapshot.forEach((item)=>{
       const concateId = item.val().blockId + item.val().blockById;
-      arr.push(concateId)
+      arr.push(concateId);
     })
-    setBlockList(arr)
+    setBlockList(arr);
   })
  
 },[])
 
-// console.log("friendsList", friendsList )
-// console.log("blockList", blockList )
-// console.log(data.userInfo.uid)
+// cancel Friend Request
+
+const handelCancelRequest = (item)=>{
+const request = friendRequestList.find(
+  (req)=>req.combinedId === data.userInfo.uid + item.uid
+);
+
+if (request) {
+  remove(ref(db, "friendRequest/" + request.frndReqId));
+}
+}
+
+
 
   return (
     <section>
-        <div className='w-[330px] h-[450px] ml-[16px]  shadow-box rounded-b-3xl overflow-y-scroll'>
+        <div className='w-[330px]  ml-[16px] pb-5 shadow-box rounded-b-3xl'>
       <header className='flex justify-between  py-5 px-5 sticky top-0 bg-white z-[2]'>
             <h2 className='font-poppins font-semibold text-xl text-black'>User List</h2>
             <BsThreeDotsVertical className='text-[20px] text-primary  '/>
         </header>
 
-        <article>
+        <article className='h-[370px] overflow-y-scroll'>
             {   
                     userList.map((item, index)=>(
-                        <div key={index} className='flex justify-between px-5 pb-[13px] mb-4 relative before:content-[""] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:bg-[rgba(0,0,0,0.25)] before:h-[1px] before:w-[277px]'>
+                        <div key={index} className='flex justify-between items-center px-5 pb-[13px] mb-4 relative before:content-[""] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:bg-[rgba(0,0,0,0.25)] before:h-[1px] before:w-[277px]'>
                         <div className='flex '>
                         <figure className='w-[50px] h-[50px] overflow-hidden '>
                              <img src={profileOne} alt="profolio-one" />
@@ -132,19 +142,22 @@ useEffect(()=>{
                              {
                               blockList.includes(data.userInfo.uid+ item.uid) ||
                               blockList.includes(item.uid + data.userInfo.uid) ?
-                              <SmallButton  className ="px-[22px] py-1 cursor-default">Block</SmallButton>
+                              <SmallButton  className ="px-3 py-1 cursor-default !text-base ">Block</SmallButton>
                               :
                               friendsList.includes(data.userInfo.uid + item.uid) ||
                               friendsList.includes(item.uid + data.userInfo.uid)
                               ?
-                              <SmallButton  className ="px-[22px] py-1 cursor-default">Friends</SmallButton>
+                              <SmallButton  className ="px-2 py-1 cursor-default text-[16px]">Friends</SmallButton>
                               :
-                              friendRequestList.includes(data.userInfo.uid + item.uid) ||
-                              friendRequestList.includes(item.uid + data.userInfo.uid)
+                              friendRequestList.some((req)=> req.combinedId == data.userInfo.uid + item.uid)
                               ?
-                              <SmallButton  className ="px-[22px] py-1 cursor-default">Pending</SmallButton>
+                              <SmallButton onClick={()=> handelCancelRequest(item)} className ="px-2 py-1 cursor-pointer text-xs   ">Cancel Request</SmallButton>
+                              :
+                             friendRequestList.some((req)=> req.combinedId == item.uid + data.userInfo.uid)
+                              ?
+                              <SmallButton  className ="px-2 py-2 cursor-default text-xs   ">Pendding</SmallButton>
                               : 
-                              <SmallButton onClick={()=> sendFriendRequest(item)} className ="px-[22px] py-1">+</SmallButton>
+                              <SmallButton onClick={()=> sendFriendRequest(item)} className ="px-[22px] py-1 cursor-pointer">+</SmallButton>
 
                              }
                               
