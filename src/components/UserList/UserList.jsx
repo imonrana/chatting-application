@@ -116,7 +116,7 @@ if (request) {
   return (
     <section>
         <div className='w-[330px]  ml-[16px] pb-5 shadow-box rounded-b-3xl'>
-      <header className='flex justify-between  py-5 px-5 sticky top-0 bg-white z-[2]'>
+      <header className='flex justify-between  py-5 px-5  bg-white'>
             <h2 className='font-poppins font-semibold text-xl text-black'>User List</h2>
             <BsThreeDotsVertical className='text-[20px] text-primary  '/>
         </header>
