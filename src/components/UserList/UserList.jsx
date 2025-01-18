@@ -147,7 +147,7 @@ if (request) {
                               friendsList.includes(data.userInfo.uid + item.uid) ||
                               friendsList.includes(item.uid + data.userInfo.uid)
                               ?
-                              <SmallButton  className ="px-2 py-1 cursor-default text-[16px]">Friends</SmallButton>
+                              <SmallButton  className ="px-2 py-1 cursor-default !text-[16px]">Friends</SmallButton>
                               :
                               friendRequestList.some((req)=> req.combinedId == data.userInfo.uid + item.uid)
                               ?

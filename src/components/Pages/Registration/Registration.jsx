@@ -14,7 +14,7 @@ import { getDatabase, ref, set } from "firebase/database";
 import { Link, useNavigate } from "react-router-dom";
 
 // React Tostify 
-import { ToastContainer, toast } from 'react-toastify';
+import { Bounce, ToastContainer, toast } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 

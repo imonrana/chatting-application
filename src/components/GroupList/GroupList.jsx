@@ -7,19 +7,25 @@ import SmallButton from '../SmallButton/SmallButton';
 
 import groupImgOne from "../../assets/group_img_one.png"
 import CreateGroupModal from '../Modals/CreateGroupModal/CreateGroupModal';
-import { getDatabase, onValue, ref } from 'firebase/database';
+import { getDatabase, onValue, push, ref, set } from 'firebase/database';
 import { useSelector } from 'react-redux';
+import NoDataWarning from '../NoDataWarning/NoDataWarning';
+import { Bounce, toast, ToastContainer } from 'react-toastify';
 
 
 const GroupList = () => {
     const db = getDatabase();
     const data = useSelector((state)=> state.userDetails.userInfo);
-    const [showModal, setShowModal] = useState(false)
+    const [showModal, setShowModal] = useState(false);
     const [groupList, setGroupList] = useState([]);
+    const [sendRequest, setSendRequest] = useState([])
 
+// show modal
     const sendData = (data)=>{
         setShowModal(data)
     }
+
+    // red data for show groupList
 
        useEffect(()=>{
            const groupRef = ref(db, "groupList/");
@@ -28,16 +34,60 @@ const GroupList = () => {
                const arr = [];
                snapshot.forEach((item)=>{
                 if(item.val().adminId !== data.uid){
-                    arr.push(item.val());
+                    arr.push({...item.val(), groupListId : item.key});
                 }
-                   
+               
                })
                setGroupList(arr);
            })
        },[]);
+       
+     
+// send data for group join request
+function handelJoinRequest(item) {
+    set(ref(db, "groupJoinRequest/" + item.groupListId ),{
+        ...item,
+        requestSenderId: data.uid,
+        requestSenderName: data.displayName,
+    }).then(()=>{
+        toast.success('Join Request sent Success!');
+    })
+}
+
+// red group join data for dynamic button
+
+useEffect(()=>{
+    const groupJoinRequestRef = ref(db, "groupJoinRequest/");
+    onValue(groupJoinRequestRef, (snapshot)=>{
+        const Arr = []
+        snapshot.forEach((item) => {
+            if (data.uid === item.val().requestSenderId) {
+                
+                Arr.push({requestId: item.val().requestSenderId, groupId:item.key});
+            }
+        });
+        setSendRequest(Arr);
+    })
+},[])
+
+
 
   return (
     <section>
+        {/* tostify */}
+        <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+        />
         {/* search bar start*/}
 
         <fieldset className='relative'>
@@ -57,10 +107,12 @@ const GroupList = () => {
             </SmallButton>
         </header>
         {/* group item start */}
-        <article >
+        <article className='h-[252px] overflow-y-scroll' >
             {
-                groupList.map((item)=>(
-                    <div className='flex justify-between items-center  px-5 pb-[13px] mb-4 relative before:content-[""] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:bg-[rgba(0,0,0,0.25)] before:h-[1px] before:w-[370px]'>
+                groupList.length>0 ?
+                
+                groupList.map((item, index)=>(
+                    <div key={index} className=' flex justify-between items-center  px-5 pb-[13px] mb-4 relative before:content-[""] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:bg-[rgba(0,0,0,0.25)] before:h-[1px] before:w-[370px]'>
                     <div className='flex '>
                     <figure className='w-[70px] h-[70px] overflow-hidden '>
                         <img src={groupImgOne} alt="groupImagetwo" />
@@ -68,14 +120,31 @@ const GroupList = () => {
                     <div className='ml-3'> 
                     <h4 className='font-poppins font-semibold text-lg text-black'>
                     {item.groupName}
+                    
                     </h4>
                     <p className='font-poppins font-medium text-sm text-[rgba(77,77,77,0.75)]'>{item.tagLine}</p>
                     </div>
                     </div>
-                    <SmallButton  className ="px-[22px] py-1" >Join</SmallButton>
+                    {
+                        sendRequest.find((req)=> {
+                            return req.requestId === data.uid && req.groupId === item.groupListId
+                        })?
+                        <SmallButton className ="px-[22px] py-1" >Sent</SmallButton>
+                        :
+                        item.memberList && Object.values(item.memberList).some(
+                            (member) => member.memberId === `${data.uid}${item.adminId}`
+                          ) ?
+                        <SmallButton onClick={()=>handelJoinRequest(item)}  className ="px-[22px] py-1" >Joined</SmallButton>
+                     :
+                        <SmallButton onClick={()=>handelJoinRequest(item)}  className ="px-[22px] py-1" >Join</SmallButton>
+
+                    }
+                    
     
                 </div>
                 ))
+                :
+                <NoDataWarning title={"You have 0 group"}/>
             }
            
         </article>
