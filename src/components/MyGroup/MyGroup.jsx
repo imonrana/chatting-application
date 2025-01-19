@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Button from '../Button/Button';
 import profileOne from "../../assets/profile-one.png"
-import { getDatabase, onValue, push, ref, remove, update } from 'firebase/database';
+import { getDatabase, onValue,  ref, remove, update } from 'firebase/database';
 import { useSelector } from 'react-redux';
 import NoDataWarning from '../NoDataWarning/NoDataWarning';
 import SmallButton from '../SmallButton/SmallButton';
@@ -23,10 +23,10 @@ const MyGroup = () => {
            onValue(groupRef,(snapshot)=>{
                const arr = [];
                snapshot.forEach((item)=>{
-                if(item.val().adminId == data.uid){
+                if(item.val().adminId == data.uid || (item.memberList && Object.keys(item.val().memberList)) == data.uid){
                     arr.push({...item.val(), myGroupId:item.key});
                 }
-                   
+                 
                })
                setMyGroupList(arr);
            })
@@ -53,19 +53,22 @@ useEffect(()=>{
 
 function handelApprove(item) {
     const combainedGroupId = item.adminId + item.requestSenderId;
-    update(ref(db, "groupList/" + item.groupListId + "/" +  "memberList/" + combainedGroupId),{
+    update(ref(db, "groupList/" + item.groupListId + "/" +  "memberList/" + item.requestSenderId),{
         memberId: combainedGroupId,
+        memberName: item.requestSenderName,
+        groupListId: item.groupListId,
     }).then(()=>{
-        remove(ref(db, "groupJoinRequest/" + item.joingroupId));
-    }).then(()=>{
-        toast.success("Request Approved")
-    })
+            remove(ref(db, "groupJoinRequest/" + item.joingroupId));
+        }).then(()=>{
+            toast("hello")
+        })
 }
 
   return (
-    <section>
-         {/* tostify */}
-         <ToastContainer
+   <section>
+    <div className='w-[330px] ml-[16px] mt-[43px] pt-5 pb-5 shadow-box rounded-b-3xl'>
+         {/* react tostyfy start*/}
+            <ToastContainer
         position="top-center"
         autoClose={5000}
         hideProgressBar={false}
@@ -78,7 +81,7 @@ function handelApprove(item) {
         theme="light"
         transition={Bounce}
         />
-    <div className='w-[330px] ml-[16px] mt-[43px] pt-5 pb-5 shadow-box rounded-b-3xl'>
+        {/* react tostyfy end*/}
   <header className=' mb-[17px]  px-5 '>
         <div className='flex justify-between'>
             <h2 className='font-poppins font-semibold text-xl text-black'> {showJoin ? "Join Request" : "My Groups"}</h2>
@@ -92,28 +95,31 @@ function handelApprove(item) {
         {
             // view join request
             showJoin ?
-          
-            joinRequest.map((item)=>(
-                <div className=' shadow-box py-2 px-4'>
-                 <div key={item.joingroupId} className='flex justify-between px-5 pb-[13px] mb-4 relative before:content-[""] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:bg-[rgba(0,0,0,0.25)] before:h-[1px] before:w-[277px]'>
-            <div className="flex">
-            <figure className='w-[50px] h-[50px] overflow-hidden '>
-                <img src={profileOne} alt="profolio-one" />
-            </figure>
-            <div className='ml-[10px]'> 
-            <h4 className='font-poppins font-semibold text-sm text-black '>
-            {item.requestSenderName}
-            </h4>
-            <p className='font-poppins font-medium text-xs ]'> Want to join <span className='text-black text-base font-bold'>{item.groupName}</span></p>
+            <div>
+                {
+                     joinRequest.map((item, index)=>(
+                        <div key={index} className=' shadow-box py-2 px-4'>
+                         <div key={item.joingroupId} className='flex justify-between px-5 pb-[13px] mb-4 relative before:content-[""] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:bg-[rgba(0,0,0,0.25)] before:h-[1px] before:w-[277px]'>
+                    <div className="flex">
+                    <figure className='w-[50px] h-[50px] overflow-hidden '>
+                        <img src={profileOne} alt="profolio-one" />
+                    </figure>
+                    <div className='ml-[10px]'> 
+                    <h4 className='font-poppins font-semibold text-sm text-black '>
+                    {item.requestSenderName}
+                    </h4>
+                    <p className='font-poppins font-medium text-xs ]'> Want to join <span className='text-black text-base font-bold'>{item.groupName}</span></p>
+                    </div>
+                    </div>
+                </div>
+                <div className='flex justify-center items-center gap-x-5'>
+                <SmallButton onClick={()=>handelApprove(item)} className='!text-base py-2 px-4 self-center'>Approve</SmallButton>
+                <SmallButton className='!text-base py-2 px-4 self-center'>Reject</SmallButton>
+                </div>    
+                </div>
+                 ))
+                }
             </div>
-            </div>
-        </div>
-        <div className='flex justify-center items-center gap-x-5'>
-        <SmallButton onClick={()=>handelApprove(item)} className='!text-base py-2 px-4 self-center'>Approve</SmallButton>
-        <SmallButton className='!text-base py-2 px-4 self-center'>Reject</SmallButton>
-        </div>    
-        </div>
-            ))
         :
         // my group
         <div>

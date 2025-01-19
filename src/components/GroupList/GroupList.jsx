@@ -18,7 +18,8 @@ const GroupList = () => {
     const data = useSelector((state)=> state.userDetails.userInfo);
     const [showModal, setShowModal] = useState(false);
     const [groupList, setGroupList] = useState([]);
-    const [sendRequest, setSendRequest] = useState([])
+    const [sendRequest, setSendRequest] = useState([]);
+    const [acceptRequest, setAcceptRequest] = useState([]);
 
 // show modal
     const sendData = (data)=>{
@@ -50,44 +51,48 @@ function handelJoinRequest(item) {
         requestSenderId: data.uid,
         requestSenderName: data.displayName,
     }).then(()=>{
-        toast.success('Join Request sent Success!');
+        toast('Join Request sent Success!')
+        
     })
 }
 
 // red group join data for dynamic button
-
+// send join request
 useEffect(()=>{
     const groupJoinRequestRef = ref(db, "groupJoinRequest/");
     onValue(groupJoinRequestRef, (snapshot)=>{
-        const Arr = []
+        const arr = []
         snapshot.forEach((item) => {
             if (data.uid === item.val().requestSenderId) {
                 
-                Arr.push({requestId: item.val().requestSenderId, groupId:item.key});
+                arr.push({requestId: item.val().requestSenderId, groupId:item.key});
             }
         });
-        setSendRequest(Arr);
+        setSendRequest(arr);
     })
-},[])
+},[data.uid])
 
+// accept join request
+
+useEffect(()=>{
+const acceptRequestRef = ref(db, "groupList/");
+onValue(acceptRequestRef, (snapshot)=>{
+     const arr = []
+    snapshot.forEach((item)=>{
+        const memberList = item.val().memberList
+        if(memberList){
+            if (data.uid == Object.keys(item.val().memberList) ) {
+                 arr.push(...Object.values(item.val().memberList))
+            }
+        }
+    })
+   setAcceptRequest(arr)
+})
+},[]);
 
 
   return (
     <section>
-        {/* tostify */}
-        <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition={Bounce}
-        />
         {/* search bar start*/}
 
         <fieldset className='relative'>
@@ -97,9 +102,23 @@ useEffect(()=>{
         <BsThreeDotsVertical  className='text-[20px] text-primary absolute top-1/2 right-[23px] -translate-y-1/2'  />
         </fieldset>
         {/* search bar end */}
-
         {/* group list start */}
       <div className='w-[420px]   mt-[43px] shadow-box pb-5 rounded-3xl'>
+        {/* react tostyfy start*/}
+                <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                transition={Bounce}
+                />
+                {/* react tostyfy end*/}
       <header className='flex justify-between pt-[20px] mb-[17px] px-5'>
             <h2 className='font-poppins font-semibold text-xl text-black'>Groups List</h2>
             <SmallButton onClick={()=>setShowModal(!showModal)} className ="px-[8px] py-1 text-base hover:bg-transparent border border-primary hover:text-black transition duration-300" >
@@ -131,13 +150,13 @@ useEffect(()=>{
                         })?
                         <SmallButton className ="px-[22px] py-1" >Sent</SmallButton>
                         :
-                        item.memberList && Object.values(item.memberList).some(
-                            (member) => member.memberId === `${data.uid}${item.adminId}`
-                          ) ?
-                        <SmallButton onClick={()=>handelJoinRequest(item)}  className ="px-[22px] py-1" >Joined</SmallButton>
-                     :
+                        acceptRequest.find((req)=>{
+                            return req.memberId === item.adminId+data.uid && req.groupListId === item.groupListId
+                        })
+                        ?
+                        <SmallButton className ="px-[22px] py-1" >Joined</SmallButton>
+                        :
                         <SmallButton onClick={()=>handelJoinRequest(item)}  className ="px-[22px] py-1" >Join</SmallButton>
-
                     }
                     
     
