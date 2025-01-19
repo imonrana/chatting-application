@@ -7,6 +7,7 @@ import SmallButton from '../SmallButton/SmallButton';
 // fire base import
 import { getDatabase, ref, onValue, push, set, remove } from "firebase/database";
 import { useSelector } from 'react-redux';
+import NoDataWarning from '../NoDataWarning/NoDataWarning';
 
 
 const UserList = () => {
@@ -17,6 +18,8 @@ const UserList = () => {
     const [friendRequestList, setFriendRequestList] = useState([]);
     const [friendsList, setFriendsList] = useState([]);
     const [blockList, setBlockList] = useState([]);
+    const [searchQuery, setSearchQuery] = useState([]);
+    const [searchData, setSearchData] = useState("")
 
 
 // read firebase data for user list
@@ -111,7 +114,32 @@ if (request) {
 }
 }
 
+// Search Functionality for userList
 
+function handelSearch(e) {
+  const data = e.target.value;
+  setSearchData(data);
+
+if (data == 0) {
+  setSearchData("")
+  setSearchQuery([]) 
+}else{
+  let arr = [];
+  userList.filter((user)=>{
+    const searchItem = user.username.toLowerCase().includes(data.toLowerCase());
+    if (searchItem) {
+      arr.push(user)
+      
+    }
+    setSearchQuery(arr)
+  })
+}
+  
+}
+
+
+console.log(searchQuery, "query")
+console.log(searchData.length, "data")
 
   return (
     <section>
@@ -120,9 +148,62 @@ if (request) {
             <h2 className='font-poppins font-semibold text-xl text-black'>User List</h2>
             <BsThreeDotsVertical className='text-[20px] text-primary  '/>
         </header>
-
-        <article className='h-[370px] overflow-y-scroll'>
+        <div  className='mx-5 mb-4'>
+          <input onChange={handelSearch} 
+          className=' border-2 border-gray-400 outline-none w-full py-1 px-5 rounded-lg shadow-lg ' 
+           type="search" name="search"/>
+          </div>
+        <article className='h-[315px] overflow-y-scroll'>
             {   
+            searchData && searchQuery.length === 0 ?
+            <NoDataWarning title ="No Matching Data Found"/>
+            :
+            searchQuery.length > 0 ?
+            searchQuery.map((item, index)=>(
+              <div key={index} className='flex justify-between items-center px-5 pb-[13px] mb-4 relative before:content-[""] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:bg-[rgba(0,0,0,0.25)] before:h-[1px] before:w-[277px]'>
+              <div className='flex '>
+              <figure className='w-[50px] h-[50px] overflow-hidden '>
+                   <img src={profileOne} alt="profolio-one" />
+               </figure>
+              <div className='ml-[10px]'> 
+               <h4 className='font-poppins font-semibold text-sm text-black '>
+               {item.username }
+               
+               </h4>
+               <p className='font-poppins font-medium text-xs text-[rgba(77,77,77,0.75)]'>{item.email.slice(0,17) + (item.email.length >17 ?  "..." : "")}</p>
+               </div>
+              </div>
+              <div className='mt-2 px-[8px] '>
+                 
+                   {
+                    blockList.includes(data.userInfo.uid+ item.uid) ||
+                    blockList.includes(item.uid + data.userInfo.uid) ?
+                    <SmallButton  className ="px-3 py-1 cursor-default !text-base ">Block</SmallButton>
+                    :
+                    friendsList.includes(data.userInfo.uid + item.uid) ||
+                    friendsList.includes(item.uid + data.userInfo.uid)
+                    ?
+                    <SmallButton  className ="px-2 py-1 cursor-default !text-[16px]">Friends</SmallButton>
+                    :
+                    friendRequestList.some((req)=> req.combinedId == data.userInfo.uid + item.uid)
+                    ?
+                    <SmallButton onClick={()=> handelCancelRequest(item)} className ="px-2 py-1 cursor-pointer text-xs   ">Cancel Request</SmallButton>
+                    :
+                   friendRequestList.some((req)=> req.combinedId == item.uid + data.userInfo.uid)
+                    ?
+                    <SmallButton  className ="px-2 py-2 cursor-default text-xs   ">Pendding</SmallButton>
+                    : 
+                    <SmallButton onClick={()=> sendFriendRequest(item)} className ="px-[22px] py-1 cursor-pointer">+</SmallButton>
+
+                   }
+                    
+                  
+               </div>
+           </div>
+          ))
+            :
+            
+            
                     userList.map((item, index)=>(
                         <div key={index} className='flex justify-between items-center px-5 pb-[13px] mb-4 relative before:content-[""] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:bg-[rgba(0,0,0,0.25)] before:h-[1px] before:w-[277px]'>
                         <div className='flex '>
