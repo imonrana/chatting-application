@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import profilePhoto from "../../assets/profile_pic.png"
 import { SlHome } from "react-icons/sl";
 import { BsChatDotsFill } from "react-icons/bs";
@@ -8,12 +8,12 @@ import { ImExit } from "react-icons/im";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import ProfileImgModal from '../Modals/ProfileImgModal/ProfileImgModal';
 import { getAuth } from 'firebase/auth';
+import { NavLink} from 'react-router-dom';
 
 
 const NavigationBar = () => {
 
   const auth = getAuth()
-
   const [profileImgUpdate, setProfileImgUpdate] = useState(false);
  const [childCropData, setChildCropData] = useState(profilePhoto)
 
@@ -37,12 +37,15 @@ const NavigationBar = () => {
 
             {/* navigate icon */}
             <div className='mt-[60px]'>
-            <div className='bg-white text-[43px] text-primary py-[22px] px-[50px] ml-[25px] mr-[8px] rounded-l-[20px]' >
-            <SlHome />
+            <div className='mt-[50px]' >
+            <NavLink to="/" className= {({isActive})=> isActive ? "bg-white text-[43px] text-primary py-[22px] px-[50px] ml-[25px] mr-[8px] rounded-l-[20px] inline-block": " text-[43px] text-[#BAD1FF]  py-[22px] px-[50px] ml-[25px] mr-[8px] rounded-l-[20px] inline-block"}>
+            <SlHome/>
+            </NavLink>
             </div>
-            
-            <div className='mt-[50px] text-[43px] text-[#BAD1FF] py-[22px] px-[50px] ml-[25px] mr-[8px] rounded-l-[20px]' >
+            <div className='mt-[50px]' >
+            <NavLink to="/message" className= {({isActive})=> isActive ? "bg-white text-[43px] text-primary py-[22px] px-[50px] ml-[25px] mr-[8px] rounded-l-[20px] inline-block": " text-[43px] text-[#BAD1FF]  py-[22px] px-[50px] ml-[25px] mr-[8px] rounded-l-[20px] inline-block"}>
             <BsChatDotsFill />
+            </NavLink>
             </div>
             <div className='mt-[50px] text-[43px] text-[rgba(255,255,255,0.70)] py-[22px] px-[50px] ml-[25px] mr-[8px] rounded-l-[20px]' >
             <IoMdNotificationsOutline />

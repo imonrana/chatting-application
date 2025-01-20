@@ -151,7 +151,7 @@ console.log(searchData.length, "data")
         <div  className='mx-5 mb-4'>
           <input onChange={handelSearch} 
           className=' border-2 border-gray-400 outline-none w-full py-1 px-5 rounded-lg shadow-lg ' 
-           type="search" name="search"/>
+           type="search" name="search" placeholder='Search by user name'/>
           </div>
         <article className='h-[315px] overflow-y-scroll'>
             {   
