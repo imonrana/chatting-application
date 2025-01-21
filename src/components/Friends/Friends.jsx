@@ -10,7 +10,8 @@ import NoDataWarning from '../NoDataWarning/NoDataWarning';
 
 
 
-const Friends = () => {
+const Friends = (props) => {
+    const {active} = props
 const db = getDatabase();
 const [friends, setFriends] = useState([])
   const data = useSelector((item)=>item.userDetails.userInfo);
@@ -91,10 +92,22 @@ function handelBlock(item){
                 </p>
                 </div>
                 </div>
-                <div className='mt-2 flex gap-2'>
-                    <SmallButton onClick={()=>handelUnfriend(item)} className= "py-0.5 px-2 text-xs ml-1 rounded-md">Unfriend</SmallButton>
-                    <SmallButton onClick={()=>handelBlock(item)} className= "py-0.5 px-2 text-xs rounded-md">Block</SmallButton>
+                
+                <div className="mt-2 flex gap-2">
+                    {active === "message" ?
+                        // for message
+                        <SmallButton onClick={()=>handelUnfriend(item)} className= "py-0.5 px-2 text-xs ml-1 rounded-md">Message</SmallButton>
+                      :
+                      <>
+                      {/* for home page */}
+                      <SmallButton onClick={()=>handelUnfriend(item)} className= "py-0.5 px-2 text-xs ml-1 rounded-md">Unfriend</SmallButton>
+                      <SmallButton onClick={()=>handelBlock(item)} className= "py-0.5 px-2 text-xs rounded-md">Block</SmallButton>
+                      </>
+                    }
+                  
                 </div>
+           
+
             </div>
             ))
             :
