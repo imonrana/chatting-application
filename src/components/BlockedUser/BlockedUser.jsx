@@ -45,13 +45,13 @@ function handelUnblock(item) {
 }
   return (
     <section>
-    <div className='w-[330px] ml-[16px] mt-[43px] pt-5 pb-5  shadow-box rounded-b-3xl'>
-  <header className='flex justify-between  mb-[17px] px-5'>
+    <div className='w-[330px] ml-[16px]  pt-3 pb-5  shadow-box rounded-b-3xl'>
+  <header className='flex justify-between  mb-4 px-4'>
         <h2 className='font-poppins font-semibold text-xl text-black'>Block List</h2>
         <BsThreeDotsVertical className='text-[20px] text-primary  '/>
     </header>
 
-    <article className='h-[370px] overflow-y-scroll'>
+    <article className='h-56 overflow-y-scroll'>
     {
         blockList.length>0 ?
         blockList.map((item)=>(

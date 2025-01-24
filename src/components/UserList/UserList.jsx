@@ -138,22 +138,21 @@ if (data == 0) {
 }
 
 
-console.log(searchQuery, "query")
-console.log(searchData.length, "data")
+
 
   return (
     <section>
         <div className='w-[330px]  ml-[16px] pb-5 shadow-box rounded-b-3xl'>
-      <header className='flex justify-between  py-5 px-5  bg-white'>
+      <header className='flex justify-between  py-3 px-3  bg-white'>
             <h2 className='font-poppins font-semibold text-xl text-black'>User List</h2>
-            <BsThreeDotsVertical className='text-[20px] text-primary  '/>
+            <BsThreeDotsVertical className='text-xl text-primary  '/>
         </header>
-        <div  className='mx-5 mb-4'>
+        <div  className='mx-5 mb-5'>
           <input onChange={handelSearch} 
-          className=' border-2 border-gray-400 outline-none w-full py-1 px-5 rounded-lg shadow-lg ' 
+          className=' font-poppins placeholder:font-poppins placeholder:font-medium   border-2 border-gray-400 outline-none w-full py-1 px-5 rounded-lg shadow-lg ' 
            type="search" name="search" placeholder='Search by user name'/>
           </div>
-        <article className='h-[315px] overflow-y-scroll'>
+        <article className='h-44 overflow-y-scroll'>
             {   
             searchData && searchQuery.length === 0 ?
             <NoDataWarning title ="No Matching Data Found"/>

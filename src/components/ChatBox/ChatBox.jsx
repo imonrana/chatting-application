@@ -1,12 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import chatProfilePIc from "../../assets/chat-profile-img.png"
 import { BsThreeDotsVertical } from 'react-icons/bs'
-import SenderMsgBox from '../SenderMsgBox/SenderMsgBox'
-import ReciverMsgBox from '../ReciverMsgBox/ReciverMsgBox'
+import MsgBox from '../MsgBox/MsgBox'
 import ChatBoxFooter from '../ChatBoxFooter/ChatBoxFooter'
+import { useSelector } from 'react-redux'
+import { getDatabase, onValue, ref } from 'firebase/database'
 const ChatBox = () => {
+    const db = getDatabase();
+    const data = useSelector((item)=> item.userDetails.userInfo);
+     const msgInfo = useSelector((item)=>item.chatDetails.chatInfo);
+     const [msgDetails, setMsgDetails] = useState([]);
+// get MSG dynamically
+
+useEffect(()=>{
+    const msgRef = ref(db, "singleMessage/")
+    onValue(msgRef, (snapshot)=>{
+        const arr = []
+       snapshot.forEach((item)=>{
+        if(
+        (data.uid === item.val().msgSenderId && msgInfo.id === item.val().msgReciverId)
+        ||
+        (data.uid === item.val().msgReciverId && msgInfo.id === item.val().msgSenderId )
+        ){
+            arr.push(item.val())
+        }
+       })
+       setMsgDetails(arr);
+    })
+},[])
+
+
   return (
-   <div className='shadow-md w-[689px] rounded-[20px] pb-[34px]'>
+   <div className='shadow-md w-[689px] rounded-[20px] pb-6'>
     {/* chatbox profile info */}
     <header className=' mx-[52px] py-7 flex items-center justify-between border-b-2 border-[rgba(0,0,0,0.25)]'>
      <div className='flex items-center gap-x-8'> 
@@ -14,7 +39,7 @@ const ChatBox = () => {
             <img src={chatProfilePIc} alt="chatProfilePIc" />
         </div>
         <div>
-            <h2 className='font-poppins font-semibold text-2xl text-[#000000]'>Swathi </h2>
+            <h2 className='font-poppins font-semibold text-2xl text-[#000000]'>{msgInfo ?.name || "Sewty"} </h2>
             <p className='font-poppins font-normal text-sm text-[rgba(0,0,0,0.85)]'>Online</p>
         </div>
      </div>
@@ -26,11 +51,7 @@ const ChatBox = () => {
     {/* msg part start */}
     <div className='h-[350px] overflow-y-scroll'>
     <div>
-        <ReciverMsgBox/>
-    </div>
-
-    <div>
-        <SenderMsgBox/>
+        <MsgBox msgDetails = {msgDetails}/>
     </div>
     </div>
 

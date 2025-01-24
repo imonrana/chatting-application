@@ -9,7 +9,8 @@ import { Bounce, toast, ToastContainer } from 'react-toastify';
 
 
 
-const MyGroup = () => {
+const MyGroup = (props) => {
+    const {active} = props
     const db = getDatabase();
     const data = useSelector((state)=> state.userDetails.userInfo);
     const [myGroupList, setMyGroupList] = useState([]);
@@ -23,7 +24,8 @@ const MyGroup = () => {
            onValue(groupRef,(snapshot)=>{
                const arr = [];
                snapshot.forEach((item)=>{
-                if(item.val().adminId == data.uid || (item.memberList && Object.keys(item.val().memberList)) == data.uid){
+          
+                if(item.val().adminId.includes(data.uid) || (item.val().memberList && Object.keys(item.val().memberList).includes(data.uid))){
                     arr.push({...item.val(), myGroupId:item.key});
                 }
                  
@@ -60,13 +62,13 @@ function handelApprove(item) {
     }).then(()=>{
             remove(ref(db, "groupJoinRequest/" + item.joingroupId));
         }).then(()=>{
-            toast("hello")
+            toast.success("Join Request Approved")
         })
 }
 
   return (
    <section>
-    <div className='w-[330px] ml-[16px] mt-[43px] pt-5 pb-5 shadow-box rounded-b-3xl'>
+    <div className=' w-[330px] ml-6  pt-3 pb-5 shadow-box rounded-b-3xl'>
          {/* react tostyfy start*/}
             <ToastContainer
         position="top-center"
@@ -82,27 +84,27 @@ function handelApprove(item) {
         transition={Bounce}
         />
         {/* react tostyfy end*/}
-  <header className=' mb-[17px]  px-5 '>
+  <header className=' mb-2  px-3 '>
         <div className='flex justify-between'>
-            <h2 className='font-poppins font-semibold text-xl text-black'> {showJoin ? "Join Request" : "My Groups"}</h2>
+            <h2 className='font-poppins font-semibold text-xl text-black'> { active === "message" &&  (showJoin ? "Join Request" : "Groups List")  || (showJoin ? "Join Request" : "My Groups") }</h2>
             <Button onClick={()=>setShowJoin(!showJoin)}
             className='!py-2 px-2 text-white text-sm '>{showJoin ? "View my Group" : "View join request"}</Button>
         </div>
        
     </header>
     
-    <article className='h-[360px] overflow-y-scroll '>
+    <article className={ `${active === "message" ? "h-36" : "h-56" } overflow-y-scroll`}>
         {
+            showJoin ? 
             // view join request
-            showJoin ?
-            <div>
+            <div >
                 {
                      joinRequest.map((item, index)=>(
                         <div key={index} className=' shadow-box py-2 px-4'>
                          <div key={item.joingroupId} className='flex justify-between px-5 pb-[13px] mb-4 relative before:content-[""] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:bg-[rgba(0,0,0,0.25)] before:h-[1px] before:w-[277px]'>
                     <div className="flex">
                     <figure className='w-[50px] h-[50px] overflow-hidden '>
-                        <img src={profileOne} alt="profolio-one" />
+                        <img src={profileOne} alt="profileOne" />
                     </figure>
                     <div className='ml-[10px]'> 
                     <h4 className='font-poppins font-semibold text-sm text-black '>

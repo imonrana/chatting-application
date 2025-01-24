@@ -7,11 +7,12 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import VerifiedEmail from '../VerifiedEmail/VerifiedEmail'
 import { Outlet } from 'react-router-dom';
 import NavigationBar from '../NavigationBar/NavigationBar';
-import Home from '../Pages/Home/Home';
+
 
 const Root = () => {
     const auth = getAuth();
-    const [verified, setVerified] = useState(false)
+    const [verified, setVerified] = useState(() => {
+      return localStorage.getItem("isVerified") === "true"});
     const navigate = useNavigate()
     const data = useSelector(state => state.userDetails.userInfo);
   
@@ -19,22 +20,23 @@ const Root = () => {
         if(!data){
           navigate("/login")
         }
-      })
+      },[data,navigate])
       
-
    useEffect(()=>{
     onAuthStateChanged(auth, (user) => {
-        if (user.emailVerified) {
-          setVerified(true)
+        if ( user.emailVerified) {
+          setVerified(true);
+          localStorage.setItem("isVerified", "true")
         } else {
           setVerified(false)
+          localStorage.setItem("isVerified", "false")
         }
       });
-
    },[]);
 
+
   return (
-    <section  className='relative p-4'>
+<section  className='relative p-3'>
 {
   verified ?
   <div className='flex gap-x-[20px]'>

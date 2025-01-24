@@ -40,6 +40,8 @@ const handelCreateGroup = ()=>{
             toast('Group Create Successfully')
             setGroupName("");
             setTagLine("");
+        }).then(()=>{
+            OnSendData(false);
         })
     }
     else{
@@ -69,7 +71,7 @@ const handelCreateGroup = ()=>{
         transition={Bounce}
         />
         {/* react tostyfy end*/}
-        <div className='  w-[500px] bg-gradient-to-r from-indigo-500 to-purple-500  rounded-lg  py-5 space-y-5 '>
+        <div className= {` ${OnSendData ? "animate-zoomIn" : "animate-zoomOut"} w-[500px] bg-gradient-to-r from-indigo-500 to-purple-500  rounded-lg  py-5 space-y-5 `}>
             
             <div className='px-5 relative'>
             <label className='block text-white text-base font-bold pb-1'  htmlFor="CreateGroup">Group Name:</label>

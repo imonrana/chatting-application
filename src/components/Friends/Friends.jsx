@@ -5,16 +5,18 @@ import profileOne from "../../assets/profile-one.png";
 
 
 import { getDatabase, onValue, push, ref, remove, set } from 'firebase/database';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import NoDataWarning from '../NoDataWarning/NoDataWarning';
+import { msgChatInfo } from '../Slices/MsgChatSlice';
 
 
 
 const Friends = (props) => {
     const {active} = props
-const db = getDatabase();
-const [friends, setFriends] = useState([])
-  const data = useSelector((item)=>item.userDetails.userInfo);
+    const dispatch = useDispatch();
+    const db = getDatabase();
+    const [friends, setFriends] = useState([])
+     const data = useSelector((item)=>item.userDetails.userInfo);
 
 // red data for show friends
 useEffect(()=>{
@@ -66,15 +68,37 @@ function handelBlock(item){
         
 }
 
+
+// send msg 
+
+function handelMsg(item) {
+    let chatProfileInfo = {}
+    if (data.uid === item.senderId) {
+            
+        chatProfileInfo = {
+                status: "single",
+                id: item.reciverId,
+                name: item.reciverName,
+                }
+    }else{
+        chatProfileInfo = {
+                status: "single",
+                id: item.senderId,
+                name:item.senderName,
+            }
+    }
+    dispatch(msgChatInfo(chatProfileInfo));
+    localStorage.setItem("msgChatInfo", JSON.stringify(chatProfileInfo));
+}
   return (
     <section>
-        <div className='w-[330px] ml-[16px] pt-5 pb-5 shadow-box rounded-b-3xl'>
-      <header className='flex justify-between  mb-[17px] px-5'>
+        <div className='w-[330px] ml-[16px] pt-3 pb-5 shadow-box rounded-b-3xl'>
+      <header className='flex justify-between  mb-[17px] px-3'>
             <h2 className='font-poppins font-semibold text-xl text-black'>Friends</h2>
             <BsThreeDotsVertical className='text-[20px] text-primary  '/>
         </header>
 
-        <article className='h-[370px] overflow-y-scroll'>
+        <article className='h-56 overflow-y-scroll'>
         {
             friends.length>0 ?
             friends.map((item, index)=>(
@@ -96,7 +120,7 @@ function handelBlock(item){
                 <div className="mt-2 flex gap-2">
                     {active === "message" ?
                         // for message
-                        <SmallButton onClick={()=>handelUnfriend(item)} className= "py-0.5 px-2 text-xs ml-1 rounded-md">Message</SmallButton>
+                        <SmallButton onClick={()=>handelMsg(item)} className= "py-0.5 px-2 text-xs ml-1 rounded-md">Message</SmallButton>
                       :
                       <>
                       {/* for home page */}
@@ -121,5 +145,4 @@ function handelBlock(item){
     </section>
   )
 }
-
 export default Friends

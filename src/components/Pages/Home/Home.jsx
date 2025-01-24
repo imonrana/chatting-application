@@ -12,18 +12,19 @@ import BlockedUser from '../../BlockedUser/BlockedUser'
 const Home = () => {
 
   return (
-    <>
- <div className='flex'>
+    <section className='space-y-3'>
+ <div className='flex h-[calc(50vh-20px)]'>
  <GroupList/>
   <Friends/>
   <UserList/>
  </div>
- <div className='flex'>
+
+ <div className='flex h-[calc(50vh-20px)]'>
   <FriendRequest/>
   <MyGroup/>
   <BlockedUser/>
  </div>
- </>
+ </section>
   )
 }
 
