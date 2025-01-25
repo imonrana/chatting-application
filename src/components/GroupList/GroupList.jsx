@@ -7,7 +7,7 @@ import SmallButton from '../SmallButton/SmallButton';
 
 import groupImgOne from "../../assets/group_img_one.png"
 import CreateGroupModal from '../Modals/CreateGroupModal/CreateGroupModal';
-import { getDatabase, onValue, ref, set } from 'firebase/database';
+import { getDatabase, onValue, push, ref, set } from 'firebase/database';
 import { useSelector } from 'react-redux';
 import NoDataWarning from '../NoDataWarning/NoDataWarning';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
@@ -18,85 +18,81 @@ const GroupList = () => {
     const data = useSelector((state)=> state.userDetails.userInfo);
     const [showModal, setShowModal] = useState(false);
     const [groupList, setGroupList] = useState([]);
-    const [sendRequest, setSendRequest] = useState([]);
+    const [joinReq, setJoinReq] = useState([]);
     const [acceptRequest, setAcceptRequest] = useState([]);
 
 
-// show modal
-    const sendData = (data)=>{
-        setShowModal(data)
+// show modal 
+    const handelModal = (onshowModal)=>{
+        setShowModal(onshowModal)
     }
 
-    // red data for show groupList
+    // show groupList data
 
-       useEffect(()=>{
-           const groupRef = ref(db, "groupList/");
-           
-           onValue(groupRef,(snapshot)=>{
-               const arr = [];
-               snapshot.forEach((item)=>{
-                if(item.val().adminId !== data.uid){
-                    arr.push({...item.val(), groupListId : item.key});
+    useEffect(()=>{
+        const groupListRef = ref(db, "groupList/");
+        onValue(groupListRef, (snapshot)=>{
+            let array = [];
+            snapshot.forEach((item)=>{
+                if(data.uid !== item.val().adminId){
+                    array.push({...item.val(), groupId: item.key})
                 }
-               
-               })
-               setGroupList(arr);
-           })
-       },[]);
-       
-     
-// send data for group join request
-function handelJoinRequest(item) {
-    set(ref(db, "groupJoinRequest/" + item.groupListId ),{
-        ...item,
-        requestSenderId: data.uid,
+            })
+            setGroupList(array)
+        })
+
+    },[data.uid])
+
+
+// handel group member join request
+
+function handelGroupJoin(item) {
+    console.log(item)
+
+    set(push(ref(db, "groupJoinRequest/")),{
+        groupId: item.groupId,
+        groupAdminId : item.adminId,
+        groupAdminName: item.adminName,
+        groupName:item.groupName,
         requestSenderName: data.displayName,
-    }).then(()=>{
-        toast('Join Request sent Success!')
-        
+        requestSenderId: data.uid,
     })
 }
 
-
-// red group join data for dynamic button
-// send join request
-useEffect(()=>{
-    const groupJoinRequestRef = ref(db, "groupJoinRequest/");
-    onValue(groupJoinRequestRef, (snapshot)=>{
-        let arr = [];
-        snapshot.forEach((item) => {
-            if (data.uid === item.val().requestSenderId) {
-                
-                arr.push({requestId: item.val().requestSenderId, groupId:item.key});
-            }
-        });
-        setSendRequest(arr);
-    })
-},[])
-
-
-
-
-
-
-// accept join request
+// handel red group Join Request for dynamic set button
 
 useEffect(()=>{
-const acceptRequestRef = ref(db, "groupList/");
-onValue(acceptRequestRef, (snapshot)=>{
-     const arr = []
-    snapshot.forEach((item)=>{
-        const memberList = item.val().memberList
-        if(memberList){
-            if (data.uid === Object.keys(item.val().memberList)[0] ) {
-                 arr.push(...Object.values(item?.val().memberList))
+    const joinReqRef = ref(db, "groupJoinRequest/");
+    onValue(joinReqRef, (snapshot)=>{
+        let array = [];
+        snapshot.forEach((item)=>{
+            if(item.val().requestSenderId === data.uid){
+                array.push({...item.val(), joinId:item.key})
             }
+        })
+        setJoinReq(array)
+    }) 
+},[data.uid]);
+
+
+// handel red accept join request data for dymanic joined button
+
+useEffect(()=>{
+    const reqRef = ref(db, "groupList/");
+    onValue(reqRef, (snapshot)=>{
+        let array = []
+        snapshot.forEach((item)=>{
+        const memberList = item.val()?.memberList;
+        for(const key in memberList){
+        if (memberList.hasOwnProperty(key)) {
+            array.push(memberList[key])
         }
+        }
+        })
+        setAcceptRequest(array)
     })
+}, [data.uid])
 
-   setAcceptRequest(arr)
-})
-},[]);
 
 
   return (
@@ -159,19 +155,16 @@ onValue(acceptRequestRef, (snapshot)=>{
                     </div>
                     </div>
                     {
-                       sendRequest.find((req)=> {
-                            return  req.requestId.includes(data.uid)  && req.groupId.includes(item.groupListId)
-                        })
+                       
+                       joinReq.find((req)=> req.requestSenderId === data.uid && req.groupId === item.groupId)
                         ?
                         <SmallButton className ="px-[22px] py-1" >Sent</SmallButton>
                         :
-                        acceptRequest.find((req)=>{
-                            return req.memberId.includes(item.adminId+data.uid)  && req.groupListId.includes(item.groupListId)
-                        })
+                        acceptRequest.find((req)=> req.groupMemberId === item.adminId + data.uid && req.groupId === item.groupId)
                         ?
                         <SmallButton className ="px-[22px] py-1" >Joined</SmallButton>
                         :
-                        <SmallButton onClick={()=>handelJoinRequest(item)}  className ="px-[22px] py-1" >
+                        <SmallButton onClick={()=>handelGroupJoin(item)}  className ="px-[22px] py-1" >
                             <lord-icon
                                       src="https://cdn.lordicon.com/sbnjyzil.json"
                                       trigger="hover"
@@ -198,7 +191,7 @@ onValue(acceptRequestRef, (snapshot)=>{
         {/* create Group Modal start */}
     {
         showModal &&
- <CreateGroupModal OnSendData = {sendData} />
+ <CreateGroupModal onShowModal = {handelModal} />
     }
        
 

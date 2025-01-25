@@ -69,27 +69,32 @@ function handelBlock(item){
 }
 
 
-// send msg 
+// select Active Chat 
 
 function handelMsg(item) {
-    let chatProfileInfo = {}
+    let activeChat = {}
     if (data.uid === item.senderId) {
             
-        chatProfileInfo = {
+        activeChat = {
                 status: "single",
                 id: item.reciverId,
                 name: item.reciverName,
                 }
     }else{
-        chatProfileInfo = {
+        activeChat = {
                 status: "single",
                 id: item.senderId,
                 name:item.senderName,
             }
     }
-    dispatch(msgChatInfo(chatProfileInfo));
-    localStorage.setItem("msgChatInfo", JSON.stringify(chatProfileInfo));
+
+     dispatch(msgChatInfo(activeChat));
+    localStorage.setItem("msgChatInfo", JSON.stringify(activeChat));
 }
+
+
+
+
   return (
     <section>
         <div className='w-[330px] ml-[16px] pt-3 pb-5 shadow-box rounded-b-3xl'>

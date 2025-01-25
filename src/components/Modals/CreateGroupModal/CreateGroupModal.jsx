@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 
 
-const CreateGroupModal = ({OnSendData}) => {
+const CreateGroupModal = ({onShowModal}) => {
     const db = getDatabase();
     const data = useSelector((state)=> state.userDetails.userInfo);
 
@@ -15,8 +15,8 @@ const CreateGroupModal = ({OnSendData}) => {
     const [tagNameErro, setTagNameErro]=useState("");
    
 
-    const handelData = ()=>{
-        OnSendData(false);
+    const hideModal = ()=>{
+        onShowModal(false);
     }
 
     function handelGroupName(e) {
@@ -29,26 +29,25 @@ const CreateGroupModal = ({OnSendData}) => {
         setTagNameErro("")
      }
 
-
+// handel Create Group
 const handelCreateGroup = ()=>{
     if (groupName && tagLine) {
         set(push(ref(db, "groupList/")),{
             groupName: groupName,
             tagLine: tagLine,
             adminId: data.uid,
+            adminName: data.displayName,
         }).then(()=>{
             toast('Group Create Successfully')
             setGroupName("");
             setTagLine("");
-        }).then(()=>{
-            OnSendData(false);
-        })
+        });
     }
     else{
         if(!groupName){
             setGroupNameErro("please input group name")
         }else if (!tagLine) {
-            setTagNameErro("please input group name")
+            setTagNameErro("please input tag name")
         }
 
     }
@@ -71,9 +70,10 @@ const handelCreateGroup = ()=>{
         transition={Bounce}
         />
         {/* react tostyfy end*/}
-        <div className= {` ${OnSendData ? "animate-zoomIn" : "animate-zoomOut"} w-[500px] bg-gradient-to-r from-indigo-500 to-purple-500  rounded-lg  py-5 space-y-5 `}>
+        <div className= {` ${onShowModal ? "animate-zoomIn" : "animate-zoomOut"} w-[500px] bg-gradient-to-r from-indigo-500 to-purple-500  rounded-lg  py-5 space-y-5 `}>
             
             <div className='px-5 relative'>
+
             <label className='block text-white text-base font-bold pb-1'  htmlFor="CreateGroup">Group Name:</label>
             <input className='py-2 w-[270px] px-2'
             value={groupName}
@@ -91,9 +91,8 @@ const handelCreateGroup = ()=>{
             
             <div className='space-x-2 mx-auto w-fit py-2'>
             <SmallButton onClick={handelCreateGroup}  className="py-1 px-2 font-poppins text-base">Create</SmallButton>
-            <SmallButton onClick={handelData}  className="py-1 px-2 font-poppins text-base">Go Back</SmallButton>
+            <SmallButton onClick={hideModal}  className="py-1 px-2 font-poppins text-base">Go Back</SmallButton>
             </div>
-            
         </div>
     </div>
   )

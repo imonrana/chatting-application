@@ -3,12 +3,12 @@ import { createSlice } from "@reduxjs/toolkit";
 export const msgChatSlice = createSlice({
     name: "msgChatSlice",
     initialState:{
-        chatInfo: localStorage.getItem("msgChatInfo") ? JSON.parse(localStorage.getItem("msgChatInfo")) :null
+        activeData: localStorage.getItem("msgChatInfo") ? JSON.parse(localStorage.getItem("msgChatInfo")) : null,
     },
 
     reducers:{
         msgChatInfo: (state, action)=>{
-           state.chatInfo = action.payload
+           state.activeData = action.payload;
         }
     }
 });

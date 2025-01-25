@@ -1,18 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, {useState } from 'react'
+import { useSelector } from 'react-redux';
+import { getDatabase, push, ref, set } from 'firebase/database';
+import SmallButton from '../SmallButton/SmallButton';
+import moment from 'moment';
+import EmojiPicker from 'emoji-picker-react';
+
 import { MdOutlineEmojiEmotions } from "react-icons/md";
 import { FcGallery } from "react-icons/fc";
 import { FaPaperPlane } from "react-icons/fa";
-import SmallButton from '../SmallButton/SmallButton';
-import { getDatabase, push, ref, set } from 'firebase/database';
-import { useSelector } from 'react-redux';
-import EmojiPicker from 'emoji-picker-react';
-import moment from 'moment';
+
+
+
+
 const ChatBoxFooter = () => {
-const [msg, setMsg] = useState("");
-const [showemoji,  setShowEmoji] = useState(false)
 const db = getDatabase()
 const data = useSelector((item)=> item.userDetails.userInfo);
-const chatProfile = useSelector((item)=>item.chatDetails.chatInfo);
+const activeData = useSelector((item)=>item.chatDetails.activeData);
+const [msg, setMsg] = useState("");
+const [showemoji,  setShowEmoji] = useState(false)
 
 // write data to send msg
 
@@ -21,8 +26,8 @@ const chatProfile = useSelector((item)=>item.chatDetails.chatInfo);
       msg: msg,
       msgSenderId: data.uid,
       msgSenderName: data.displayName,
-      msgReciverName: chatProfile.name,
-      msgReciverId: chatProfile.id,
+      msgReciverName: activeData.name,
+      msgReciverId: activeData.id,
       data: moment().format(),
     }).then(()=>{
       setMsg("");
@@ -31,7 +36,7 @@ const chatProfile = useSelector((item)=>item.chatDetails.chatInfo);
   }
 
 
-// for emojiPiker 
+// for handel emojiPiker 
 
 
   const onEmojiClick = (event, emojiObject)=>{
@@ -49,13 +54,13 @@ const chatProfile = useSelector((item)=>item.chatDetails.chatInfo);
         name="input-message" id="inputmessage"></textarea>
          {/* icon */}
         <div className='text-xl text-orange-400 flex gap-x-3 absolute top-[10px] right-[31px]'>
-        <MdOutlineEmojiEmotions onClick={()=> setShowEmoji(!showemoji)}/>
+        <MdOutlineEmojiEmotions className='cursor-pointer' onClick={()=> setShowEmoji(!showemoji)}/>
         <FcGallery />
         </div>
 
         {
           showemoji && 
-          <div className='absolute bottom-[50px] left-1/2 -translate-x-1/2'>
+          <div className='absolute bottom-[50px] '>
           <EmojiPicker onEmojiClick={onEmojiClick} />
            </div>
         }

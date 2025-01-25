@@ -5,18 +5,17 @@ import { useSelector } from 'react-redux';
 import moment from 'moment';
 
 
-const MsgBox = ({msgDetails}) => {
+const MsgBox = ({message}) => {
 
-const msgInfo = useSelector((item)=>item.chatDetails.chatInfo);
   const data = useSelector((item)=>item.userDetails.userInfo);
- const  showMsg = msgDetails
+
 
 
 
   return (
     <div>
       {
-        showMsg.map((item, index)=>(
+        message.map((item, index)=>(
           data.uid === item.msgSenderId ?
 
           <div key={index} className='mx-[54px] my-14 text-right'>

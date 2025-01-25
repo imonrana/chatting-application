@@ -8,26 +8,27 @@ import { getDatabase, onValue, ref } from 'firebase/database'
 const ChatBox = () => {
     const db = getDatabase();
     const data = useSelector((item)=> item.userDetails.userInfo);
-     const msgInfo = useSelector((item)=>item.chatDetails.chatInfo);
-     const [msgDetails, setMsgDetails] = useState([]);
-// get MSG dynamically
+     const activeData = useSelector((item)=>item.chatDetails.activeData);
+     const [message, setMessage] = useState([]);
 
+
+// get MSG dynamically
 useEffect(()=>{
     const msgRef = ref(db, "singleMessage/")
     onValue(msgRef, (snapshot)=>{
         const arr = []
        snapshot.forEach((item)=>{
         if(
-        (data.uid === item.val().msgSenderId && msgInfo.id === item.val().msgReciverId)
+        (data.uid === item.val().msgSenderId && activeData.id === item.val().msgReciverId)
         ||
-        (data.uid === item.val().msgReciverId && msgInfo.id === item.val().msgSenderId )
+        (data.uid === item.val().msgReciverId && activeData.id === item.val().msgSenderId )
         ){
             arr.push(item.val())
         }
        })
-       setMsgDetails(arr);
+       setMessage(arr);
     })
-},[])
+},[activeData])
 
 
   return (
@@ -40,7 +41,7 @@ useEffect(()=>{
             <div className="bg-blue-500 h-2 w-2 rounded-full absolute bottom-[14px] right-[9px]"></div>
         </div>
         <div>
-            <h2 className='font-poppins font-semibold text-2xl text-[#000000]'>{msgInfo ?.name || "Sewty"} </h2>
+            <h2 className='font-poppins font-semibold text-2xl text-[#000000]'>{activeData?.name || "Sewty"} </h2>
             <p className='font-poppins font-normal text-sm text-[rgba(0,0,0,0.85)]'>Online</p>
         </div>
      </div>
@@ -52,7 +53,7 @@ useEffect(()=>{
     {/* msg part start */}
     <div className='h-[350px] overflow-y-scroll'>
     <div>
-        <MsgBox msgDetails = {msgDetails}/>
+        <MsgBox message = {message}/>
     </div>
     </div>
 

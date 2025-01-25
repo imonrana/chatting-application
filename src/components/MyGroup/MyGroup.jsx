@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Button from '../Button/Button';
 import profileOne from "../../assets/profile-one.png"
-import { getDatabase, onValue,  ref, remove, update } from 'firebase/database';
+import { getDatabase, onValue,  push,  ref, remove, set, update } from 'firebase/database';
 import { useSelector } from 'react-redux';
 import NoDataWarning from '../NoDataWarning/NoDataWarning';
 import SmallButton from '../SmallButton/SmallButton';
-import { Bounce, toast, ToastContainer } from 'react-toastify';
+
 
 
 
@@ -17,73 +17,66 @@ const MyGroup = (props) => {
     const [showJoin, setShowJoin] = useState(false)
     const [joinRequest, setJoinRequest]=useState([])
 
-    // Red data for my group
-       useEffect(()=>{
-           const groupRef = ref(db, "groupList/");
-           
-           onValue(groupRef,(snapshot)=>{
-               const arr = [];
-               snapshot.forEach((item)=>{
-          
-                if(item.val().adminId.includes(data.uid) || (item.val().memberList && Object.keys(item.val().memberList).includes(data.uid))){
-                    arr.push({...item.val(), myGroupId:item.key});
-                }
-                 
-               })
-               setMyGroupList(arr);
-           })
-       },[]);
+    // display data for mygroup
 
-// read data for join request
+    useEffect(()=>{
+        const myGroupRef = ref(db, "groupList/");
+        onValue(myGroupRef, (snapshot)=>{
+            let array = []
+            snapshot.forEach((item)=>{
+                const memberList = item.val().memberList
+                let memberListInfo = null;
+                for(const key in memberList){
+                    if (memberList.hasOwnProperty(key)) {
+                        memberListInfo = memberList[key];
+                    }
+                }
+                if(item.val().adminId === data.uid || memberListInfo?.groupMemberId === item.val().adminId + data.uid) {
+                    array.push({...item.val(), groupKey: item.key})
+                }
+            })
+            setMyGroupList(array)
+        })
+
+    },[data.uid]);
+
+
+
+// group Join Request data display
 
 useEffect(()=>{
-    const joingroupRef = ref(db, "groupJoinRequest/");
-    
-    onValue(joingroupRef,(snapshot)=>{
-        const arr = [];
+    const joinReqRef = ref(db, "groupJoinRequest/");
+    onValue(joinReqRef, (snapshot)=>{
+        let array = [];
         snapshot.forEach((item)=>{
-         if(item.val().adminId == data.uid){
-             arr.push({...item.val(), joingroupId:item.key});
-         }
-            
+            if(item.val().groupAdminId === data.uid){
+                array.push({...item.val(), joinId:item.key})
+            }
         })
-        setJoinRequest(arr);
-    })
-},[]);
+        setJoinRequest(array)
+    }) 
+},[data.uid]);
 
-// handel group request approve
+// handel Join request approve
 
-function handelApprove(item) {
-    const combainedGroupId = item.adminId + item.requestSenderId;
-    update(ref(db, "groupList/" + item.groupListId + "/" +  "memberList/" + item.requestSenderId),{
-        memberId: combainedGroupId,
-        memberName: item.requestSenderName,
-        groupListId: item.groupListId,
+function handelReqApprove(item) {
+    set(push(ref(db, "groupList/" + item.groupId + "/" + "memberList" )),{
+        groupMemberId : item.groupAdminId + item.requestSenderId,
+        groupId: item.groupId,
+        groupName: item.groupName,
+        groupAdminName: item.groupAdminName,
+        groupMemberName: item.requestSenderName,
+
     }).then(()=>{
-            remove(ref(db, "groupJoinRequest/" + item.joingroupId));
-        }).then(()=>{
-            toast.success("Join Request Approved")
-        })
+        remove(ref(db, "groupJoinRequest/" + item.joinId))
+    })
 }
+
+
 
   return (
    <section>
-    <div className=' w-[330px] ml-6  pt-3 pb-5 shadow-box rounded-b-3xl'>
-         {/* react tostyfy start*/}
-            <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition={Bounce}
-        />
-        {/* react tostyfy end*/}
+<div className=' w-[330px] ml-6  pt-3 pb-5 shadow-box rounded-b-3xl'>
   <header className=' mb-2  px-3 '>
         <div className='flex justify-between'>
             <h2 className='font-poppins font-semibold text-xl text-black'> { active === "message" &&  (showJoin ? "Join Request" : "Groups List")  || (showJoin ? "Join Request" : "My Groups") }</h2>
@@ -115,7 +108,7 @@ function handelApprove(item) {
                     </div>
                 </div>
                 <div className='flex justify-center items-center gap-x-5'>
-                <SmallButton onClick={()=>handelApprove(item)} className='!text-base py-2 px-4 self-center'>Approve</SmallButton>
+                <SmallButton onClick={()=>handelReqApprove(item)} className='!text-base py-2 px-4 self-center'>Approve</SmallButton>
                 <SmallButton className='!text-base py-2 px-4 self-center'>Reject</SmallButton>
                 </div>    
                 </div>
@@ -129,7 +122,7 @@ function handelApprove(item) {
             myGroupList.length >0 ?
 
             myGroupList.map((item)=>(
-                <div key={item.myGroupId} className='flex justify-between px-5 pb-[13px] mb-4 relative before:content-[""] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:bg-[rgba(0,0,0,0.25)] before:h-[1px] before:w-[277px]'>
+                <div key={item.groupKey} className='flex justify-between px-5 pb-[13px] mb-4 relative before:content-[""] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:bg-[rgba(0,0,0,0.25)] before:h-[1px] before:w-[277px]'>
             <div className="flex">
             <figure className='w-[50px] h-[50px] overflow-hidden '>
                 <img src={profileOne} alt="profolio-one" />
