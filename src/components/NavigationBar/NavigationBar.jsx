@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { getAuth, signOut } from "firebase/auth";
 
 import profilePhoto from "../../assets/profile_pic.png";
 import ProfileImgModal from "../Modals/ProfileImgModal/ProfileImgModal";
@@ -16,6 +17,26 @@ const NavigationBar = () => {
   const [profileImgUpdate, setProfileImgUpdate] = useState(false);
   const [childCropData, setChildCropData] = useState(profilePhoto);
   const data = useSelector((selector) => selector.userDetails.userInfo);
+
+
+
+
+
+// handel singOut 
+const auth = getAuth();
+const navigate = useNavigate()
+
+
+function handelSingOut(){
+  const auth = getAuth();
+  signOut(auth).then(() => {
+    // Sign-out successful.
+    localStorage.removeItem("userLoginInfo");
+    navigate("login/")
+  }).catch((error) => {
+    // An error happened.
+  })
+}
   return (
     <section>
       <aside className="bg-primary rounded-[20px] w-[186px] h-[calc(100vh-32px)]">
@@ -83,7 +104,9 @@ const NavigationBar = () => {
               <IoSettingsOutline />
             </div>
             <div className="text-4xl text-[rgba(255,255,255,0.70)] font-bold pt-10 px-14 w-fit m-auto rounded-l-[20px] ">
+              <NavLink to="" onClick={handelSingOut}>
               <ImExit />
+              </NavLink>
             </div>
           </div>
         </div>

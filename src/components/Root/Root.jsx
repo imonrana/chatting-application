@@ -11,11 +11,10 @@ import NavigationBar from '../NavigationBar/NavigationBar';
 
 const Root = () => {
     const auth = getAuth();
-    const [verified, setVerified] = useState(() => {
-      return localStorage.getItem("isVerified") === "true"});
+    const [verified, setVerified] = useState(()=> localStorage.getItem("isVerified"));
     const navigate = useNavigate()
     const data = useSelector(state => state.userDetails.userInfo);
-  
+ 
     useEffect(()=>{
         if(!data){
           navigate("/login")
@@ -32,7 +31,7 @@ const Root = () => {
           localStorage.setItem("isVerified", "false")
         }
       });
-   },[]);
+   },[auth]);
 
 
   return (
