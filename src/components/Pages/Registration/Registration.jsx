@@ -1,25 +1,26 @@
 import React, { useState } from "react";
+// React Router Dom
+import { Link, useNavigate } from "react-router-dom";
+// React Tostify 
+import { Bounce, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+// React Loder spiner
+import { ThreeCircles } from 'react-loader-spinner'
+// firebase auth email password 
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile  } from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
 
-import registration from "../../../assets/registration.png";
+import registration from "../../../assets/propose.gif";
 import Button from "../../Button/Button";
 
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 
-// firebase auth email password 
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile  } from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
 
-// React Router Dom
-import { Link, useNavigate } from "react-router-dom";
 
-// React Tostify 
-import { Bounce, ToastContainer, toast } from 'react-toastify';
 
-import 'react-toastify/dist/ReactToastify.css';
 
-// React Loder spiner
-import { ThreeCircles } from 'react-loader-spinner'
+
 
 
 
@@ -206,7 +207,7 @@ const Registration = () => {
         draggable
         pauseOnHover
         theme="colored"
-        transition: Bounce
+        transition = "Bounce"
         />
       {/* tostify Registration succes end */}
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { BsFillTriangleFill } from "react-icons/bs";
-import msgImg from "../../assets/registration.png"
+import msgImg from "../../assets/profile-one.png"
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 

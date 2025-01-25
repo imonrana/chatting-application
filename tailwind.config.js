@@ -12,9 +12,12 @@ export default {
         "nunito":["Nunito", "sans-serif"]
       },
       colors:{
-        "primary": "#5F35F5",
+        "primary": "#F75E25",
         "secondary": "#000000",
         "info": "#11175D"
+      },
+      backgroundImage:{
+        "logoBg" : "url(./src/assets/love-chat-logo.png)"
       },
       maxWidth:{
         "container": "1440px"

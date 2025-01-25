@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import login from "../../../assets/login.jpg"
-import { FcGoogle } from "react-icons/fc";
+import login from "../../../assets/login.gif"
+// import login from "../../../assets/love-chat.gif"
 import Button from '../../Button/Button';
 
+import { FcGoogle } from "react-icons/fc";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
@@ -159,7 +160,7 @@ const googleLogin = ()=>{
     // login validation end
     
   return (
-    <section className='flex  items-center '>
+    <section className='flex  items-center  '>
           {/* tostify registration succees start */}
       <ToastContainer
         position="top-center"
@@ -197,22 +198,25 @@ const googleLogin = ()=>{
       {/* React Loder spiner end */}
       
         <article className='w-1/2  ml-[180px]'>
-            <header className='space-y-[29px]'>
+            <header className='space-y-[16px]'>
+                <h2 className='font-sans font-bold text-xl text-[#03014C]'>Wellcome !
+                   <span className='text-red-500 font-nunito ml-4'>Love Chat</span>
+                   </h2>
                 <h1 className='font-sans font-bold text-[34px] text-[#03014C]'>Login to your account!</h1>
-                <p onClick={googleLogin}
-                 className='hover:bg-primary transition-all duration-500 hover:text-white py-[23px] pl-[29px] pr-[42px] rounded-lg border border-[rgb(3,1,76,0.30)] w-fit font-sans font-semibold text-sm text-[#03014C] align-middle cursor-pointer'> 
+                <button onClick={googleLogin}
+                 className='hover:bg-red-500 transition-all duration-500 hover:text-white py-[23px] pl-[29px] pr-[42px] rounded-lg border border-[rgb(3,1,76,0.30)] w-fit font-sans font-semibold text-sm text-[#03014C] align-middle cursor-pointer'> 
                     <span ><FcGoogle className='inline-block text-lg mr-2' /></span>
                      Login with Google
-                     </p>
+                     </button>
             </header>
 
-            <form action="" className='pt-[32px] space-y-[60px] relative'>
+            <form action="" className='pt-[32px] space-y-[55px] relative'>
                 {/* login email */}
                 <fieldset className='w-fit relative'>
                     <input 
                     onInput={handleEmailInput} 
                     onChange={handelEmail}
-                    className='w-[372px] h-[70px] border-b border-[rgb(3,1,76,0.20)] outline-none  peer placeholder-transparent' type="email" name='email' id='loginEmail' placeholder='Email Address' />
+                    className='w-[372px] h-[60px] border-b border-[rgb(3,1,76,0.20)] outline-none  peer placeholder-transparent' type="email" name='email' id='loginEmail' placeholder='Email Address' />
                     <label className={`${onInputEmailL ? " top-[-10px]  peer-focus:top-[-10px] text-[13px]  text-[rgb(3,1,76,0.50)]" : "top-1/2 -translate-y-1/2 "}
                       block font-sans font-semibold text-xl text-[#03014C] absolute peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-focus:top-0 peer-focus:text-[14px] peer-focus:text-[rgb(3,1,76,0.50)] transition-all duration-500  `} htmlFor="loginEmail">
                     Email Address
@@ -226,7 +230,7 @@ const googleLogin = ()=>{
                     <input 
                     onChange={handelPassword}
                     onInput={handlePwdInput} 
-                    className='w-[372px] h-[70px] border-b border-[rgb(3,1,76,0.20)] outline-none  peer placeholder-transparent' 
+                    className='w-[372px] h-[60px] border-b border-[rgb(3,1,76,0.20)] outline-none  peer placeholder-transparent' 
                     type={showPass? "text": "password"} 
                     name='pwd' 
                     id='loginPwd' 
@@ -244,9 +248,9 @@ const googleLogin = ()=>{
                 <p className='text-red-500 absolute -bottom-7 left-0'>{worngLoingInfo}</p>
                 }
             </form>
-            <div className='mt-[55px] space-y-[43px]'>
+            <div className='mt-[60px] space-y-[20px]'>
                 <Button onClick={handelLogin} className="py-[26px] px-[122px] rounded-lg font-sans font-semibold text-xl text-[#FFFFFF]">Login to Continue</Button>
-                <Link to="/forgotPassword"><Button className=" mt-4 py-[10px] px-[122px] rounded-lg font-sans font-semibold text-xl text-[#FFFFFF]">Forgot Password</Button></Link>
+                <Link to="/forgotPassword"><Button className=" mt-2 py-[10px] px-[127px]  rounded-lg font-sans font-semibold text-xl text-[#FFFFFF]">Forgot Password</Button></Link>
                 <p className='font-sans text-sm font-normal text-[#03014C]'>Don’t have an account ? <span className=' font-bold text-[#EA6C00] cursor-pointer'><Link to ="/registration">Sign up</Link></span></p>
             </div>
         </article>

@@ -31,12 +31,13 @@ useEffect(()=>{
 
 
   return (
-   <div className='shadow-md w-[689px] rounded-[20px] pb-6'>
+   <div className='shadow-md rounded-[20px] pb-6'>
     {/* chatbox profile info */}
     <header className=' mx-[52px] py-7 flex items-center justify-between border-b-2 border-[rgba(0,0,0,0.25)]'>
      <div className='flex items-center gap-x-8'> 
-     <div className='w-[75px] h-[75px] rounded-full overflow-hidden'>
-            <img src={chatProfilePIc} alt="chatProfilePIc" />
+     <div className='w-[75px] h-[75px]  rounded-full overflow-hidden relative'>
+            <img src={chatProfilePIc} alt="chatProfilePIc"/>
+            <div className="bg-blue-500 h-2 w-2 rounded-full absolute bottom-[14px] right-[9px]"></div>
         </div>
         <div>
             <h2 className='font-poppins font-semibold text-2xl text-[#000000]'>{msgInfo ?.name || "Sewty"} </h2>

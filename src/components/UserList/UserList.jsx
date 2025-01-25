@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import NoDataWarning from '../NoDataWarning/NoDataWarning';
 
 
+
 const UserList = () => {
 
     const data = useSelector((item)=>item.userDetails);
@@ -19,7 +20,7 @@ const UserList = () => {
     const [friendsList, setFriendsList] = useState([]);
     const [blockList, setBlockList] = useState([]);
     const [searchQuery, setSearchQuery] = useState([]);
-    const [searchData, setSearchData] = useState("")
+    const [searchData, setSearchData] = useState("");
 
 
 // read firebase data for user list
@@ -222,7 +223,7 @@ if (data == 0) {
                              {
                               blockList.includes(data.userInfo.uid+ item.uid) ||
                               blockList.includes(item.uid + data.userInfo.uid) ?
-                              <SmallButton  className ="px-3 py-1 cursor-default !text-base ">Block</SmallButton>
+                              <SmallButton  className ="px-3 py-1 cursor-default !text-base ">Blocked</SmallButton>
                               :
                               friendsList.includes(data.userInfo.uid + item.uid) ||
                               friendsList.includes(item.uid + data.userInfo.uid)
@@ -237,7 +238,19 @@ if (data == 0) {
                               ?
                               <SmallButton  className ="px-2 py-2 cursor-default text-xs   ">Pendding</SmallButton>
                               : 
-                              <SmallButton onClick={()=> sendFriendRequest(item)} className ="px-[22px] py-1 cursor-pointer">+</SmallButton>
+                              <SmallButton onClick={()=> sendFriendRequest(item)} className ="px-[22px] py-1 cursor-pointer">
+                               <script src="https://cdn.lordicon.com/lordicon.js"></script>
+                               <script src="https://cdn.lordicon.com/lordicon.js"></script>
+                                  <lord-icon
+                                      src="https://cdn.lordicon.com/sbnjyzil.json"
+                                      trigger="hover"
+                                      delay="1500"
+                                      stroke="bold"
+                                      colors="primary:#ffffff,secondary:#ffffff "
+                                      style={{width:"30px", height:"30px"}}
+                                      >
+                                  </lord-icon>
+                              </SmallButton>
 
                              }
                               

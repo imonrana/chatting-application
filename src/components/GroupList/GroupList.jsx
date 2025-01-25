@@ -171,7 +171,17 @@ onValue(acceptRequestRef, (snapshot)=>{
                         ?
                         <SmallButton className ="px-[22px] py-1" >Joined</SmallButton>
                         :
-                        <SmallButton onClick={()=>handelJoinRequest(item)}  className ="px-[22px] py-1" >Join</SmallButton>
+                        <SmallButton onClick={()=>handelJoinRequest(item)}  className ="px-[22px] py-1" >
+                            <lord-icon
+                                      src="https://cdn.lordicon.com/sbnjyzil.json"
+                                      trigger="hover"
+                                      delay="1500"
+                                      stroke="bold"
+                                      colors="primary:#ffffff,secondary:#ffffff "
+                                      style={{width:"30px", height:"30px"}}
+                                      >
+                                  </lord-icon>
+                        </SmallButton>
                     }
                     
     

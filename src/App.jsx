@@ -1,11 +1,4 @@
 // import react router dom
-import {
-  createRoutesFromElements,
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-} from "react-router-dom";
-
 import './App.css'
 import Root from "./components/Root/Root";
 import Registration from "./components/Pages/Registration/Registration";
@@ -16,6 +9,19 @@ import ForgotPassword from "./components/Pages/ForgotPassword/ForgotPassword";
 import VerifiedEmail from "./components/VerifiedEmail/VerifiedEmail";
 import Message from "./components/Pages/Message/Message";
 
+import {
+  createRoutesFromElements,
+  createBrowserRouter,
+  RouterProvider,
+  Route,
+} from "react-router-dom";
+
+
+import lottie from "lottie-web";
+import { defineElement } from "@lordicon/element";
+
+// define "lord-icon" custom element with default properties
+defineElement(lottie.loadAnimation);
 
 
 const router = createBrowserRouter(
@@ -39,6 +45,7 @@ const router = createBrowserRouter(
 );
 
 function App() {
+
 
 
   return (
