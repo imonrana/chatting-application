@@ -97,7 +97,7 @@ const MyGroup = (props) => {
         <article
           className={`${
             active === "message" ? "h-36" : "h-56"
-          } overflow-y-scroll`}
+          } overflow-y-scroll scrollbar-thin scrollbar-thumb-primary scrollbar-track-slate-100  hover:scrollbar-thumb-red-400 active:scrollbar-thumb-red-500`}
         >
           {showJoin ? (
             // view join request

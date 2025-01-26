@@ -133,7 +133,7 @@ useEffect(()=>{
         {/* header part end */}
 
         {/* group item start */}
-        <article className=' h-40 overflow-y-scroll' >
+        <article className=' h-40 overflow-y-scroll scrollbar-thin scrollbar-thumb-primary scrollbar-track-slate-100  hover:scrollbar-thumb-red-400 active:scrollbar-thumb-red-500' >
             {
                 groupList.length>0 ?
                 groupList.map((item, index)=>(

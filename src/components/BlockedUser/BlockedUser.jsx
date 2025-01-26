@@ -59,7 +59,7 @@ function handelUnblock(item) {
         <BsThreeDotsVertical className='text-[20px] text-primary  '/>
     </header>
 
-    <article className='h-56 overflow-y-scroll'>
+    <article className='h-56 overflow-y-scroll scrollbar-thin scrollbar-thumb-primary scrollbar-track-slate-100  hover:scrollbar-thumb-red-400 active:scrollbar-thumb-red-500'>
     {
         blockList.length>0 ?
         blockList.map((item)=>(

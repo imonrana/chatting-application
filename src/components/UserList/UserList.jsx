@@ -142,7 +142,7 @@ const UserList = () => {
             placeholder="Search by user name"
           />
         </div>
-        <article className="h-44 overflow-y-scroll">
+        <article className="h-44 overflow-y-scroll scrollbar-thin scrollbar-thumb-primary scrollbar-track-slate-100  hover:scrollbar-thumb-red-400 active:scrollbar-thumb-red-500">
           {searchData && searchQuery.length === 0 ? (
             <NoDataWarning title="No Matching Data Found" />
           ) : searchQuery.length > 0 ? (

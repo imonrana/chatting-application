@@ -57,7 +57,7 @@ const ChatBox = () => {
       </header>
 
       {/* msg part start */}
-      <div className="h-[350px] overflow-y-scroll">
+      <div className="h-[350px] overflow-y-scroll scrollbar-thin scrollbar-thumb-primary scrollbar-track-slate-100  hover:scrollbar-thumb-red-400 active:scrollbar-thumb-red-500">
         <div>
           <MsgBox message={message} />
         </div>

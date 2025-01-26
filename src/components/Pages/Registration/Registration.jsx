@@ -137,12 +137,6 @@ const Registration = () => {
             // firebase email varification
             sendEmailVerification(auth.currentUser)
               .then(() => {
-                // Email verification sent!
-                toast.success(
-                  "Email Verification Send, Plese cheek your Email"
-                );
-              })
-              .then(() => {
                 // send user information in database
                 set(ref(db, "users/" + user.user.uid), {
                   username: user.user.displayName,
@@ -153,6 +147,12 @@ const Registration = () => {
                 setTimeout(() => {
                   navigate("/login");
                 }, 3000);
+              })
+              .then(() => {
+                // Email verification sent!
+                toast.success(
+                  "Email Verification Send, Plese cheek your Email"
+                );
               });
           });
         })
@@ -235,9 +235,8 @@ const Registration = () => {
             <label
               className={`${
                 emailValue
-                  ? "top-[-22px] peer-focus:top-[-22px] text-sm  bg-white"
-                  : "top-1/2 -translate-y-1/2 text-xl"
-              } block p-3 font-semibold  text-[rgb(17,23,93,0.70)] absolute  left-[52px] tracking-[7.5%] transition-all duration-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-xl peer-focus:top-0 peer-focus:text-sm peer-focus:text-[rgb(17,23,93,0.70)] peer-focus:bg-white`}
+                && "top-[-22px] peer-focus:top-[-22px] text-sm  bg-white"
+              } block p-3 text-[rgb(17,23,93,0.70)] font-semibold absolute left-[52px] tracking-[7.5%] transition-all duration-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-xl peer-focus:top-0 peer-focus:text-sm peer-focus:text-[rgb(17,23,93,0.70)] peer-focus:bg-white`}
               htmlFor="email"
             >
               Email Address
@@ -263,9 +262,8 @@ const Registration = () => {
             <label
               className={`${
                 fnameValue
-                  ? "top-[-22px] peer-focus:top-[-22px] text-sm  bg-white"
-                  : "top-1/2 -translate-y-1/2 text-xl"
-              } block p-3 text-[rgb(17,23,93,0.70)] font-semibold absolute left-[52px] tracking-[7.5%] transition-all duration-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-xl peer-focus:top-0 peer-focus:text-sm peer-focus:text-[rgb(17,23,93,0.70)] peer-focus:bg-white`}
+                  && "top-[-22px] peer-focus:top-[-22px] text-sm  bg-white"
+              } block p-3 text-[rgb(17,23,93,0.70)] font-semibold absolute left-[52px] tracking-[7.5%] transition-all duration-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-xl peer-focus:top-0 peer-focus:text-sm peer-focus:text-[rgb(17,23,93,0.70)] peer-focus:bg-white`}
               htmlFor="fname"
             >
               Full Name
@@ -291,9 +289,8 @@ const Registration = () => {
             <label
               className={`${
                 pwdValue
-                  ? "top-[-22px] peer-focus:top-[-22px] text-sm  bg-white"
-                  : "top-1/2  -translate-y-1/2 text-xl"
-              } block p-3 text-[rgb(17,23,93,0.70)] font-semibold absolute left-[52px] tracking-[7.5%] transition-all duration-500 peer-placeholder-shown:top-1/2  peer-placeholder-shown:text-xl peer-focus:top-0 peer-focus:text-sm peer-focus:text-[rgb(17,23,93,0.70)] peer-focus:bg-white`}
+                && "top-[-22px] peer-focus:top-[-22px] text-sm  bg-white"
+              } block p-3 text-[rgb(17,23,93,0.70)] font-semibold absolute left-[52px] tracking-[7.5%] transition-all duration-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-xl peer-focus:top-0 peer-focus:text-sm peer-focus:text-[rgb(17,23,93,0.70)] peer-focus:bg-white`}
               htmlFor="pwd"
             >
               Password
