@@ -13,20 +13,21 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { ImExit } from "react-icons/im";
 import { FaCloudUploadAlt } from "react-icons/fa";
 
+
+
 const NavigationBar = () => {
-  const [profileImgUpdate, setProfileImgUpdate] = useState(false);
-  const [childCropData, setChildCropData] = useState(profilePhoto);
+  
+  const auth = getAuth();
+  const navigate = useNavigate()
   const data = useSelector((selector) => selector.userDetails.userInfo);
 
+  const [profileImgUpdate, setProfileImgUpdate] = useState(false);
+  const [childCropData, setChildCropData] = useState(profilePhoto);
 
 
 
 
 // handel singOut 
-const auth = getAuth();
-const navigate = useNavigate()
-
-
 function handelSingOut(){
   const auth = getAuth();
   signOut(auth).then(() => {
@@ -37,6 +38,8 @@ function handelSingOut(){
     // An error happened.
   })
 }
+
+
   return (
     <section>
       <aside className="bg-primary rounded-[20px] w-[186px] h-[calc(100vh-32px)]">
@@ -114,9 +117,9 @@ function handelSingOut(){
 
       {profileImgUpdate && (
         <ProfileImgModal
-          setChildCropData={setChildCropData}
-          setProfileImgUpdate={setProfileImgUpdate}
-          profileImgUpdate={profileImgUpdate}
+          onsetChildCropData={setChildCropData}
+          onsetProfileImgUpdate={setProfileImgUpdate}
+          onprofileImgUpdate={profileImgUpdate}
         />
       )}
     </section>

@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from 'react'
-
-
-import { BsThreeDotsVertical } from "react-icons/bs";
-import profileOne from "../../assets/profile-one.png"
-import SmallButton from '../SmallButton/SmallButton';
-import { getDatabase, onValue, push, ref, remove, set } from 'firebase/database';
 import { useSelector } from 'react-redux';
+import SmallButton from '../SmallButton/SmallButton';
 import NoDataWarning from '../NoDataWarning/NoDataWarning';
 
+import { getDatabase, onValue, push, ref, remove, set } from 'firebase/database';
+
+import profileOne from "../../assets/profile-one.png"
+import { BsThreeDotsVertical } from "react-icons/bs";
+
+
+
+
 const BlockedUser = () => {
+
 const db = getDatabase();
-const [blockList, setBlockList] = useState([]);
 const data = useSelector((selector)=> selector.userDetails.userInfo);
+const [blockList, setBlockList] = useState([]);
+
+
 
 // red data for show daynamicallay block user
-
 useEffect(()=>{
     const blockRef = ref(db, "block/");
     
@@ -29,8 +34,8 @@ useEffect(()=>{
     })
 },[])
 
-// unblock blocked friend and remove data form block
 
+// unblock blocked friend and remove data form block
 function handelUnblock(item) {
    set(push(ref(db, "friends/")),{
     senderId: item.blockById,
@@ -43,6 +48,9 @@ function handelUnblock(item) {
     remove(ref(db,"block/" + item.blockListId))
    })
 }
+
+
+// JSX start
   return (
     <section>
     <div className='w-[330px] ml-[16px]  pt-3 pb-5  shadow-box rounded-b-3xl'>

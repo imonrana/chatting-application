@@ -1,9 +1,10 @@
 import React, {useState } from 'react'
 import { useSelector } from 'react-redux';
 import { getDatabase, push, ref, set } from 'firebase/database';
-import SmallButton from '../SmallButton/SmallButton';
 import moment from 'moment';
 import EmojiPicker from 'emoji-picker-react';
+
+import SmallButton from '../SmallButton/SmallButton';
 
 import { MdOutlineEmojiEmotions } from "react-icons/md";
 import { FcGallery } from "react-icons/fc";
@@ -13,14 +14,16 @@ import { FaPaperPlane } from "react-icons/fa";
 
 
 const ChatBoxFooter = () => {
+
 const db = getDatabase()
 const data = useSelector((item)=> item.userDetails.userInfo);
 const activeData = useSelector((item)=>item.chatDetails.activeData);
 const [msg, setMsg] = useState("");
 const [showemoji,  setShowEmoji] = useState(false)
 
-// write data to send msg
 
+
+// write data to send msg
   function handelSendMsg(){
     set(push(ref(db, "singleMessage/")),{
       msg: msg,
@@ -37,8 +40,6 @@ const [showemoji,  setShowEmoji] = useState(false)
 
 
 // for handel emojiPiker 
-
-
   const onEmojiClick = (event, emojiObject)=>{
     if (emojiObject) {
       setMsg((prevMsg)=> prevMsg + event.emoji);

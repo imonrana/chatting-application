@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import {useNavigate } from 'react-router-dom'
-
-// firebase
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import VerifiedEmail from '../VerifiedEmail/VerifiedEmail'
 import { Outlet } from 'react-router-dom';
+import {useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import NavigationBar from '../NavigationBar/NavigationBar';
+import VerifiedEmail from '../VerifiedEmail/VerifiedEmail'
+
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+
 
 
 const Root = () => {
     const auth = getAuth();
-    const [verified, setVerified] = useState(()=> localStorage.getItem("isVerified"));
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const data = useSelector(state => state.userDetails.userInfo);
+    const [verified, setVerified] = useState(()=> localStorage.getItem("isVerified"));
  
+
+// cheek valid user
     useEffect(()=>{
         if(!data){
           navigate("/login")
         }
       },[data,navigate])
-      
+
+  // cheek Email Verified
    useEffect(()=>{
     onAuthStateChanged(auth, (user) => {
         if ( user.emailVerified) {
@@ -34,6 +38,8 @@ const Root = () => {
    },[auth]);
 
 
+
+   
   return (
 <section  className='relative p-3'>
 {

@@ -1,9 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import profileOne from "../../assets/profile-one.png";
-import SmallButton from "../SmallButton/SmallButton";
-
-// firebase
 import {
   getDatabase,
   ref,
@@ -13,14 +8,24 @@ import {
   remove,
 } from "firebase/database";
 import { useSelector } from "react-redux";
+
+import SmallButton from "../SmallButton/SmallButton";
 import NoDataWarning from "../NoDataWarning/NoDataWarning";
+import profileOne from "../../assets/profile-one.png";
+
+import { BsThreeDotsVertical } from "react-icons/bs";
+
+
 
 const FriendRequest = () => {
+
   const db = getDatabase();
   const data = useSelector((selector) => selector.userDetails.userInfo);
   const [friendRequestList, setFriendRequestList] = useState([]);
 
-  // firebase database red data for show friend request
+
+
+  // handel show friend request
   useEffect(() => {
     const friendRequest = ref(db, "friendRequest/");
     onValue(friendRequest, (snapshot) => {
@@ -34,8 +39,7 @@ const FriendRequest = () => {
     });
   }, []);
 
-  // accept friend request data base
-
+  // handel accept friend request
   const handelFriendRequ = (item) => {
     set(push(ref(db, "friends/")), {
       ...item,
@@ -44,10 +48,12 @@ const FriendRequest = () => {
     });
   };
 
-  // reject friend request
+  // handel reject friend request
   const handelReject = (item) => {
     remove(ref(db, "friendRequest/" + item.userId));
   };
+
+
   return (
     <section>
       <div className="w-[420px]  pt-3 pb-5 shadow-box rounded-b-3xl">

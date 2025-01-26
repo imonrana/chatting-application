@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from 'react'
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { useDispatch, useSelector } from 'react-redux';
+import { getDatabase, onValue, push, ref, remove, set } from 'firebase/database';
+
+import { msgChatInfo } from '../Slices/MsgChatSlice';
+import NoDataWarning from '../NoDataWarning/NoDataWarning';
 import SmallButton from '../SmallButton/SmallButton';
 import profileOne from "../../assets/profile-one.png";
 
+import { BsThreeDotsVertical } from "react-icons/bs";
 
-import { getDatabase, onValue, push, ref, remove, set } from 'firebase/database';
-import { useDispatch, useSelector } from 'react-redux';
-import NoDataWarning from '../NoDataWarning/NoDataWarning';
-import { msgChatInfo } from '../Slices/MsgChatSlice';
+
 
 
 
 const Friends = (props) => {
     const {active} = props
-    const dispatch = useDispatch();
     const db = getDatabase();
-    const [friends, setFriends] = useState([])
-     const data = useSelector((item)=>item.userDetails.userInfo);
+    const data = useSelector((item)=>item.userDetails.userInfo);
+    const dispatch = useDispatch();
+    const [friends, setFriends] = useState([]);
 
-// red data for show friends
+
+// handel show friends data
 useEffect(()=>{
     const friendsRef = ref(db,"friends/");
     onValue(friendsRef, (snapshot)=>{
@@ -30,17 +33,16 @@ useEffect(()=>{
         })
         setFriends(arr);
     })
-},[])
+},[]);
 
-// remove data form friends handel unfriend
 
+//  handel unfriend
 const handelUnfriend =  (item)=>{
     remove(ref(db, "friends/" + item.friendsId))
 }
 
 
 // wirte data for block friends 
-
 function handelBlock(item){
     if(data.uid == item.reciverId){
         set(push(ref(db, "block/")),{
@@ -64,17 +66,14 @@ function handelBlock(item){
            }).then(()=>{
             remove(ref(db, "friends/" + item.friendsId ))
         });
-        }
-        
+        }  
 }
 
 
 // select Active Chat 
-
 function handelMsg(item) {
     let activeChat = {}
     if (data.uid === item.senderId) {
-            
         activeChat = {
                 status: "single",
                 id: item.reciverId,
@@ -87,11 +86,9 @@ function handelMsg(item) {
                 name:item.senderName,
             }
     }
-
      dispatch(msgChatInfo(activeChat));
     localStorage.setItem("msgChatInfo", JSON.stringify(activeChat));
 }
-
 
 
 
@@ -133,18 +130,12 @@ function handelMsg(item) {
                       <SmallButton onClick={()=>handelBlock(item)} className= "py-0.5 px-2 text-xs rounded-md">Block</SmallButton>
                       </>
                     }
-                  
                 </div>
-           
-
             </div>
             ))
             :
             <NoDataWarning title="You have 0 friends"/>
         }
-
-
-
         </article>
         </div>
     </section>

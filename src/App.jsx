@@ -1,14 +1,7 @@
 // import react router dom
 import './App.css'
 import Root from "./components/Root/Root";
-import Registration from "./components/Pages/Registration/Registration";
-import Login from "./components/Pages/Login/Login";
-import Home from './components/Pages/Home/Home';
 import firebaseConfig from "./components/Firebase/Firebase.config";
-import ForgotPassword from "./components/Pages/ForgotPassword/ForgotPassword";
-import VerifiedEmail from "./components/VerifiedEmail/VerifiedEmail";
-import Message from "./components/Pages/Message/Message";
-
 import {
   createRoutesFromElements,
   createBrowserRouter,
@@ -16,18 +9,25 @@ import {
   Route,
 } from "react-router-dom";
 
+import Registration from "./components/Pages/Registration/Registration";
+import Login from "./components/Pages/Login/Login";
+import Home from './components/Pages/Home/Home';
+import ForgotPassword from "./components/Pages/ForgotPassword/ForgotPassword";
+import VerifiedEmail from "./components/VerifiedEmail/VerifiedEmail";
+import Message from "./components/Pages/Message/Message";
 
 import lottie from "lottie-web";
 import { defineElement } from "@lordicon/element";
-
 // define "lord-icon" custom element with default properties
 defineElement(lottie.loadAnimation);
 
 
+
+// React Router Dom Setup
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      {/* Route outlet stracture  */}
+    {/* Route outlet stracture  */}
    <Route path="/"  element = {<Root/>}>
     <Route index element = {<Home/>}/>,
     <Route path="/verifiedEmail" element = {<VerifiedEmail/>}/>,
@@ -39,14 +39,10 @@ const router = createBrowserRouter(
    <Route path="/registration" element = {<Registration/>}/>
    <Route path="/login" element = {<Login/>}/>
    </Route>
-   
-    
   )
 );
 
 function App() {
-
-
 
   return (
     <>

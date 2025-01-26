@@ -1,15 +1,15 @@
 import React from 'react'
-import { BsFillTriangleFill } from "react-icons/bs";
-import msgImg from "../../assets/profile-one.png"
 import { useSelector } from 'react-redux';
 import moment from 'moment';
+import msgImg from "../../assets/profile-one.png"
+import { BsFillTriangleFill } from "react-icons/bs";
+
+
 
 
 const MsgBox = ({message}) => {
 
   const data = useSelector((item)=>item.userDetails.userInfo);
-
-
 
 
   return (
@@ -74,7 +74,6 @@ const MsgBox = ({message}) => {
         ))
       }
     </div>
-    
   )
 }
 

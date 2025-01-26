@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
+import { getDatabase, onValue, push, ref, set } from 'firebase/database';
 
-import { CiSearch } from "react-icons/ci";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import SmallButton from '../SmallButton/SmallButton';
-
+import CreateGroupModal from '../Modals/CreateGroupModal/CreateGroupModal';
+import NoDataWarning from '../NoDataWarning/NoDataWarning';
 
 import groupImgOne from "../../assets/group_img_one.png"
-import CreateGroupModal from '../Modals/CreateGroupModal/CreateGroupModal';
-import { getDatabase, onValue, push, ref, set } from 'firebase/database';
-import { useSelector } from 'react-redux';
-import NoDataWarning from '../NoDataWarning/NoDataWarning';
+import { CiSearch } from "react-icons/ci";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 
 
 const GroupList = () => {
+
     const db = getDatabase();
     const data = useSelector((state)=> state.userDetails.userInfo);
     const [showModal, setShowModal] = useState(false);
@@ -27,8 +27,8 @@ const GroupList = () => {
         setShowModal(onshowModal)
     }
 
-    // show groupList data
 
+    // show groupList data
     useEffect(()=>{
         const groupListRef = ref(db, "groupList/");
         onValue(groupListRef, (snapshot)=>{
@@ -44,11 +44,9 @@ const GroupList = () => {
     },[data.uid])
 
 
+
 // handel group member join request
-
 function handelGroupJoin(item) {
-    console.log(item)
-
     set(push(ref(db, "groupJoinRequest/")),{
         groupId: item.groupId,
         groupAdminId : item.adminId,
@@ -59,8 +57,8 @@ function handelGroupJoin(item) {
     })
 }
 
-// handel red group Join Request for dynamic set button
 
+// handel red group Join Request for dynamic sent button
 useEffect(()=>{
     const joinReqRef = ref(db, "groupJoinRequest/");
     onValue(joinReqRef, (snapshot)=>{
@@ -75,8 +73,8 @@ useEffect(()=>{
 },[data.uid]);
 
 
-// handel red accept join request data for dymanic joined button
 
+// handel red accept join request data for dymanic joined button
 useEffect(()=>{
     const reqRef = ref(db, "groupList/");
     onValue(reqRef, (snapshot)=>{
@@ -122,7 +120,6 @@ useEffect(()=>{
         </fieldset>
         {/* search bar end */}
 
-
         {/* group list start */}
       <div className='w-[420px]   mt-2 shadow-box pb-5 rounded-3xl'>
 
@@ -139,7 +136,6 @@ useEffect(()=>{
         <article className=' h-40 overflow-y-scroll' >
             {
                 groupList.length>0 ?
-                
                 groupList.map((item, index)=>(
                     <div key={index} className=' flex justify-between items-center  px-5 pb-[13px] mb-4 relative before:content-[""] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 before:bg-[rgba(0,0,0,0.25)] before:h-[1px] before:w-[370px]'>
                     <div className='flex '>
@@ -155,7 +151,6 @@ useEffect(()=>{
                     </div>
                     </div>
                     {
-                       
                        joinReq.find((req)=> req.requestSenderId === data.uid && req.groupId === item.groupId)
                         ?
                         <SmallButton className ="px-[22px] py-1" >Sent</SmallButton>
@@ -176,14 +171,11 @@ useEffect(()=>{
                                   </lord-icon>
                         </SmallButton>
                     }
-                    
-    
                 </div>
                 ))
                 :
                 <NoDataWarning title={"You have 0 group"}/>
             }
-           
         </article>
       </div>
         {/* group list end */}
@@ -193,8 +185,6 @@ useEffect(()=>{
         showModal &&
  <CreateGroupModal onShowModal = {handelModal} />
     }
-       
-
     </section>
   )
 }
