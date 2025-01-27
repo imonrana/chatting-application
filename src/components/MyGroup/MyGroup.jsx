@@ -102,6 +102,10 @@ const MyGroup = (props) => {
           {showJoin ? (
             // view join request
             <div>
+              {
+                joinRequest.length > 0 
+                ?
+                <div>
               {joinRequest.map((item, index) => (
                 <div key={index} className=" shadow-box py-2 px-4">
                   <div
@@ -140,6 +144,13 @@ const MyGroup = (props) => {
                 </div>
               ))}
             </div>
+
+                :
+
+                <NoDataWarning title={"You have 0 Join Request"} />
+              }
+            </div>
+            
           ) : (
             // my group
             <div>

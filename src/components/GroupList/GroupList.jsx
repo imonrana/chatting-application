@@ -17,6 +17,7 @@ const GroupList = () => {
     const db = getDatabase();
     const data = useSelector((state)=> state.userDetails.userInfo);
     const [showModal, setShowModal] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
     const [groupList, setGroupList] = useState([]);
     const [joinReq, setJoinReq] = useState([]);
     const [acceptRequest, setAcceptRequest] = useState([]);
@@ -126,7 +127,7 @@ useEffect(()=>{
         {/* header part start */}
       <header className='flex justify-between pt-4 mb-4 px-4'>
             <h2 className='font-poppins font-semibold text-xl text-black'>Groups List</h2>
-            <SmallButton onClick={()=>setShowModal(!showModal)} className ="px-[8px] py-1 !text-base hover:bg-transparent border border-primary hover:text-black transition duration-300" >
+            <SmallButton onClick={()=>{setShowModal(!showModal), setOpenModal(true)}} className ="px-[8px] py-1 !text-base hover:bg-transparent border border-primary hover:text-black transition duration-300" >
                 Create Group
             </SmallButton>
         </header>
@@ -183,7 +184,12 @@ useEffect(()=>{
         {/* create Group Modal start */}
     {
         showModal &&
- <CreateGroupModal onShowModal = {handelModal} />
+ <CreateGroupModal 
+ onShowModal = {handelModal}
+ onSetOpenModal = {setOpenModal}
+ onOpenModal = {openModal}
+
+ />
     }
     </section>
   )

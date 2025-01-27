@@ -8,6 +8,7 @@ import profilePhoto from "../../../assets/profile_pic.png";
 
 const ProfileImgModal = ({
   onSetProfileImgUpdate,
+  OnSetShowProfileImgModal,
   onProfileImgUpdate,
   onSetChildCropData,
 }) => {
@@ -43,7 +44,10 @@ const ProfileImgModal = ({
 
   // handel colse modal
   function handelClose() {
-    onSetProfileImgUpdate(false);
+    onSetProfileImgUpdate(false)
+    setTimeout(()=>{
+      OnSetShowProfileImgModal(false)
+    },335)
   }
 
   return (

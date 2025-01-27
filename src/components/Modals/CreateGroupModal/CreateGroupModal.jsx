@@ -5,7 +5,7 @@ import { getDatabase, push, ref, set } from "firebase/database";
 import SmallButton from "../../SmallButton/SmallButton";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 
-const CreateGroupModal = ({ onShowModal }) => {
+const CreateGroupModal = ({ onShowModal, onSetOpenModal, onOpenModal}) => {
   const db = getDatabase();
   const data = useSelector((state) => state.userDetails.userInfo);
 
@@ -14,9 +14,13 @@ const CreateGroupModal = ({ onShowModal }) => {
   const [groupNameErro, setGroupNameErro] = useState("");
   const [tagNameErro, setTagNameErro] = useState("");
 
+
   // handel hide modal
   const hideModal = () => {
-    onShowModal(false);
+    onSetOpenModal(false)
+    setTimeout(() => {
+      onShowModal(false);
+    }, 335);
   };
 
   // handel group name input
@@ -75,7 +79,7 @@ const CreateGroupModal = ({ onShowModal }) => {
       {/* react tostyfy end*/}
       <div
         className={` ${
-          onShowModal ? "animate-zoomIn" : "animate-zoomOut"
+          onOpenModal ? "animate-zoomIn" : "animate-zoomOut"
         } w-[500px] bg-gradient-to-r from-indigo-500 to-purple-500  rounded-lg  py-5 space-y-5 `}
       >
         <div className="px-5 relative">

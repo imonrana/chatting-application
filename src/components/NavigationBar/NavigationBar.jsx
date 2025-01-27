@@ -18,10 +18,11 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 const NavigationBar = () => {
   
   const auth = getAuth();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const data = useSelector((selector) => selector.userDetails.userInfo);
 
   const [profileImgUpdate, setProfileImgUpdate] = useState(false);
+  const [showProfileImgModal, SetShowProfileImgModal] = useState(false);
   const [childCropData, setChildCropData] = useState(profilePhoto);
 
 
@@ -47,7 +48,7 @@ function handelSingOut(){
 
           {/* Profile img part start */}
           <figure
-            onClick={() => setProfileImgUpdate(true)}
+            onClick={() => {SetShowProfileImgModal(true), setProfileImgUpdate(true)}}
             className='w-[100px] h-[100px]  rounded-full overflow-hidden m-auto relative group
             after:content-[""] after:absolute after:top-0 after:left-0 hover:after:bg-[rgba(0,0,0,0.41)] after:h-full after:w-full cursor-pointer transition-all duration-500 '
           >
@@ -115,11 +116,12 @@ function handelSingOut(){
         </div>
       </aside>
 
-      {profileImgUpdate && (
+      {showProfileImgModal && (
         <ProfileImgModal
-          onsetChildCropData={setChildCropData}
-          onsetProfileImgUpdate={setProfileImgUpdate}
-          onprofileImgUpdate={profileImgUpdate}
+        onSetChildCropData={setChildCropData}
+        onSetProfileImgUpdate={setProfileImgUpdate}
+        OnSetShowProfileImgModal ={SetShowProfileImgModal}
+        onProfileImgUpdate={profileImgUpdate}
         />
       )}
     </section>
